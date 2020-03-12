@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Просмотр моделей - Autodesk Forge</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <link rel="shortcut icon" href="https://github.com/Autodesk-Forge/learn.forge.viewmodels/raw/master/img/favicon.ico">
+    <!-- Common packages: jQuery, Bootstrap, jsTree -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/jstree.min.js"></script>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.4.1/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/jstree/3.3.7/themes/default/style.min.css" />
+    <!-- Autodesk Forge Viewer files -->
+    <link rel="stylesheet" href="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/style.min.css" type="text/css">
+    <script src="https://developer.api.autodesk.com/modelderivative/v2/viewers/7.*/viewer3D.min.js"></script>
+    <!-- this project files -->
+    <link href="css/style.css" rel="stylesheet" />
+    <script src="js/ForgeTree.js"></script>
+    <script src="js/ForgeViewer.js"></script>
+    <script src="js/handleselectionextension.js"></script>
+    <script src="js/animatecamera.js"></script>
+    <script src="js/markup3dExtension.js"></script>
+    <script src="js/objectselection.js"></script>
+
+
+</head>
+
+<body>
+    <!-- Fixed navbar by Bootstrap: https://getbootstrap.com/examples/navbar-fixed-top/ -->
+    <!-- <nav class="navbar navbar-default navbar-fixed-top" id="navbar">
+        <div class="container-fluid">
+            <ul class="nav navbar-nav left">
+                <li>
+                    <a href="https://mospolytech.ru/" target="_blank">
+                        <img alt="Московский политех" src="img/top_sh.png" height="40">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav> -->
+    <!-- End of navbar -->
+    <div class="container-fluid fill main">
+        <div class="row fill">
+            <div class="col-xs-4 col-sm-3 col-md-3 transition-width fill" id="left-col">
+                <div class="panel panel-default fill">
+                    <div class="panel-heading clearfix" data-toggle="tooltip">
+                        Контейнеры и Объекты
+                        <span id="refreshBuckets" class="glyphicon glyphicon-refresh" style="cursor: pointer"></span>
+                        <button class="btn btn-xs btn-info btn-create-bucket" id="showFormCreateBucket" data-toggle="modal" data-target="#createBucketModal">
+              <span class="glyphicon glyphicon-folder-close"></span> Новый контейнер
+            </button>
+                    </div>
+                    <div id="appBuckets">
+                    </div>
+                </div>
+            </div>
+            <div class="col-xs-12 col-sm-9 col-md-9 transition-width fill viewer">
+                <div id="forgeViewer">
+                </div>
+                <div id="annotations">
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <form id="uploadFile" method='post' enctype="multipart/form-data">
+        <input id="hiddenUploadField" type="file" name="theFile" style="visibility:hidden" />
+    </form>
+    <!-- Modal Create Bucket -->
+    <div class="modal fade" id="createBucketModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Cancel">
+            <span aria-hidden="true">&times;</span>
+          </button>
+                    <h4 class="modal-title" id="myModalLabel">Создать новый контейнер</h4>
+                </div>
+                <div class="modal-body">
+                    <input type="text" id="newBucketKey" class="form-control">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-default" id="cancel" data-dismiss="modal">Отмена</button>
+                    <button type="button" class="btn btn-primary" id="createNewBucket">Создать контейнер</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
