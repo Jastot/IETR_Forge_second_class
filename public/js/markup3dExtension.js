@@ -30,7 +30,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 this.viewer.toolbar.addControl(this._group);
             }
             let panel = this.panel;
-            let index = 1;
+            let index = 0;
             let html_str;
             let renderer = viewer.impl.renderer();
             // Add a new button to the toolbar group
@@ -53,10 +53,13 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                         console.log(particle[index]);
                         screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[index].point.x, particle[index].point.y, particle[index].point.z), viewer.impl.camera);
                         let text = $("#markuptext").val();
-                        if (text == 'undefined')
-                            text = "";
-                        html_str += '<div class="annotation" id="annotation_' + index + '"' + 'style = "top: ' + screenpoint.y + 'px; left: ' + screenpoint.x + 'px;"' +
-                            '>' + '<span class="annotationIndex">' + index + '</span>' + '<span>' + text + '</span></div>';
+                        if (text == '') {
+                            html_str += '<div class="annotation annotation-without-text" id="annotation_' + (index + 1) + '"' + 'style = "top: ' + screenpoint.y + 'px; left: ' + screenpoint.x + 'px;"' +
+                                '>' + '<span class="annotationIndex">' + (index + 1) + '</span>' + '<span>' + '</span></div>';
+                        } else {
+                            html_str += '<div class="annotation" id="annotation_' + (index + 1) + '"' + 'style = "top: ' + screenpoint.y + 'px; left: ' + screenpoint.x + 'px;"' +
+                                '>' + '<span class="annotationIndex">' + (index + 1) + '</span>' + '<span>' + text + '</span></div>';
+                        }
                         $("#annotations").html(html_str);
                         index++;
                         viewer.clearSelection();
@@ -66,9 +69,9 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 })
 
                 function updateScreenPosition() {
-                    for (let i = 1; i < index; i++) {
+                    for (let i = 0; i < index; i++) {
                         screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[i].point.x, particle[i].point.y, particle[i].point.z), viewer.impl.camera);
-                        let anid = '#annotation_' + i;
+                        let anid = '#annotation_' + (i + 1);
                         $(anid).css('top', screenpoint.y);
                         $(anid).css('left', screenpoint.x);
 
@@ -111,6 +114,22 @@ function TextPanel(viewer, container, id, title, options) {
     textarea.id = 'markuptext';
     this.container.appendChild(textarea);
 }
+
 TextPanel.prototype = Object.create(Autodesk.Viewing.UI.DockingPanel.prototype);
 TextPanel.prototype.constructor = TextPanel;
+TextPanel.prototype.initialize = function() {
+    // Override DockingPanel initialize()
+    this.title = this.createTitleBar(this.titleLabel || this.container.id);
+    this.title.style.fontSize = '26px';
+    this.container.appendChild(this.title);
+
+    //this.container.appendChild(this.content);
+    //this.initializeMoveHandlers(this.container);
+
+    this.closer = document.createElement("div");
+    this.closer.className = "annotation-close";
+    //this.closer.textContent = "Close";
+    this.initializeCloseHandler(this.closer);
+    this.container.appendChild(this.closer);
+};
 Autodesk.Viewing.theExtensionManager.registerExtension('Markup3dExtension', Markup3dExtension);

@@ -154,6 +154,27 @@ body {
     word-wrap: break-word;
 }
 
+.annotation-without-text {
+    background: none;
+}
+
+.annotation-close {
+    top: 8px;
+    right: 8px;
+    width: 32px;
+    height: 32px;
+    background-image: url(../img/close.png);
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+    transition: all 0.2s;
+}
+
+.annotation-close:hover {
+    background-image: url(../img/close_active.png);
+}
+
 .annotationIndex {
     display: block;
     position: absolute;
