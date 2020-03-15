@@ -142,12 +142,13 @@ body {
     z-index: 1;
     margin-left: 15px;
     margin-top: 15px;
-    padding: 1em;
-    width: 200px;
+    padding: 0.5em;
+    max-width: 150px;
     color: #fff;
-    background: rgba(0, 0, 0, 0.8);
+    background: rgba(0, 0, 0, 0.7);
     border-radius: .5em;
-    font-size: 12px;
+    font-size: 14px;
+    font-family: 'Roboto', sans-serif;
     line-height: 1.2;
     transition: opacity .5s;
     word-wrap: break-word;
@@ -168,6 +169,31 @@ body {
     background: rgba(0, 0, 0, 0.8);
 }
 
+.text-annotation {
+    border-radius: 5px;
+    width: 234px;
+    height: 242px;
+    margin: 10px 5px 10px 5px;
+    color: black;
+    resize: none;
+    font-size: 18px;
+    font-family: 'Roboto', sans-serif;
+    padding: 3px;
+    border: none;
+}
+
+.an-cl-btn {
+    top: 0;
+    right: 0;
+    width: 25px;
+    height: 50px;
+    background-position: 0 19px;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    position: absolute;
+    z-index: 1;
+}
+
 .viewer {
     padding: 0;
     background-color: white;
@@ -182,12 +208,12 @@ body {
 
 .textboard .headtext {
     font-size: 28px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .textboard .maintext {
     font-size: 14px;
-    font-family: Arial, Helvetica, sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 .textboard .object {
