@@ -102,7 +102,7 @@ function TextPanel(viewer, container, id, title, options) {
     this.container.classList.add('docking-panel-container-solid-color-a');
     this.container.classList.add('annotation-panel');
     this.container.style.top = "180px";
-    this.container.style.right = "15px";
+    this.container.style.left = `${$("#forgeViewer").outerWidth() - 260}px`;
     this.container.style.resize = "none";
     this.container.style.minWidth = "250px";
     this.container.style.minHeight = "330px";
@@ -123,8 +123,7 @@ TextPanel.prototype.initialize = function() {
     this.title.style.fontSize = '26px';
     this.container.appendChild(this.title);
 
-    //this.container.appendChild(this.content);
-    //this.initializeMoveHandlers(this.container);
+    this.initializeMoveHandlers(this.title);
 
     this.closer = document.createElement("div");
     this.closer.className = "annotation-close";
