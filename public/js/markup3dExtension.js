@@ -34,11 +34,14 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
             let html_str;
             let particle = [];
             let screenpoint;
+            let screenpoints = [];
+            var annotationDiv;
+            if (annotationDiv == undefined) {
+                annotationDiv = $('.progressbg').after(`<div id="annotations"></div>`);
+            }
             // Add a new button to the toolbar group
             this._button = new Autodesk.Viewing.UI.Button('Markup3dExtensionButton');
             this._button.onClick = () => {
-                //let box = Autodesk.Viewing.Model.getBoundingBox();
-                //console.log(box);
                 // Execute an action here
                 // if null, create it
                 if (panel == null) {
@@ -53,7 +56,6 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                     console.log(e.clientX - $("#left-col").outerWidth(), e.clientY);
                     particle[index] = viewer.clientToWorld(e.clientX - $("#left-col").outerWidth(), e.clientY);
                     if (particle[index]) {
-                        console.log(particle[index]);
                         screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[index].point.x, particle[index].point.y, particle[index].point.z), viewer.impl.camera);
                         let text = $("#markuptext").val();
                         if (text == '') {
@@ -68,24 +70,35 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                         viewer.clearSelection();
                         document.getElementById("markuptext").value = "";
                         updateScreenPosition();
+                        updateAnnotationOpacity();
                     }
                 }
             })
 
             function updateScreenPosition() {
                 for (let i = 0; i < index; i++) {
-                    screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[i].point.x, particle[i].point.y, particle[i].point.z), viewer.impl.camera);
+                    screenpoints[i] = viewer.impl.worldToClient(new THREE.Vector3(particle[i].point.x, particle[i].point.y, particle[i].point.z), viewer.impl.camera);
                     let anid = '#annotation_' + (i + 1);
-                    $(anid).css('top', screenpoint.y);
-                    $(anid).css('left', screenpoint.x);
-
+                    $(anid).css('top', screenpoints[i].y);
+                    $(anid).css('left', screenpoints[i].x);
                 }
-                //$("#annotation_1").style.opacity = spriteBehindObject ? 0.25 : 1;
             }
 
-            viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, e2 => {
+            function updateAnnotationOpacity() {
+                for (let i = 0; i < index; i++) {
+                    let sprite = particle[i].point;
+                    console.log(sprite);
+                    console.log(particle[i]);
+                    console.log(viewer.impl.model.getGeometryList());
+                    let dist = viewer.impl.camera.position.distanceTo(sprite);
+                    console.log(dist);
+                }
+            }
+
+            viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, () => {
                 if (particle.length) {
                     updateScreenPosition();
+                    updateAnnotationOpacity();
                 }
             });
             this._button.setToolTip('Пометки');
@@ -105,7 +118,7 @@ function TextPanel(viewer, container, id, title, options) {
     this.container.classList.add('docking-panel-container-solid-color-a');
     this.container.classList.add('annotation-panel');
     this.container.style.top = "180px";
-    this.container.style.left = `${$("#forgeViewer").outerWidth() - 260}px`;
+    this.container.style.left = "30px";
     this.container.style.resize = "none";
     this.container.style.minWidth = "250px";
     this.container.style.minHeight = "330px";
