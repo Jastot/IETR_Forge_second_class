@@ -156,11 +156,21 @@ body {
 
 .annotation-btn-close {
     position: absolute;
-    right: -32px;
-    top: -30px;
+    display: block;
+    width: 20px;
+    height: 20px;
+    right: -10px;
+    top: -10px;
     background-image: url(../img/closeAnn.png);
     background-repeat: no-repeat;
-    visibility: hidden;
+    background-size: cover;
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+._wt {
+    right: 0;
+    top: -35px;
 }
 
 .annotation-without-text {

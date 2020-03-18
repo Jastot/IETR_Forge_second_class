@@ -59,9 +59,9 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                         screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[index].point.x, particle[index].point.y, particle[index].point.z), viewer.impl.camera);
                         let text = $("#markuptext").val();
                         if (text == '') {
-                            html_str += `<div class="annotation annotation-without-text" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span></span></div>`;
+                            html_str += `<div class="annotation annotation-without-text" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span class= 'annotation-btn-close _wt'></span></div>`;
                         } else {
-                            html_str += `<div class="annotation" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span>${text}</span></div>`;
+                            html_str += `<div class="annotation" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span id = 'annotationText'>${text}</span><span class= 'annotation-btn-close'></span></div>`;
                         }
                         $("#annotations").html(html_str);
                         index++;
@@ -69,6 +69,24 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                         document.getElementById("markuptext").value = "";
                         updateScreenPosition();
                         updateAnnotationOpacity();
+                    }
+                }
+            })
+            document.querySelector('#forgeViewer').addEventListener('mouseover', e => {
+                if (e.target.className == 'annotationIndex' || e.target.id == 'annotationText') {
+                    let div = e.target.parentNode;
+                    let closebtn = div.lastChild;
+                    closebtn.style.opacity = 1;
+                    document.querySelector('.annotation').addEventListener('mouseleave', () => {
+                        closebtn.style.opacity = 0;
+                    })
+                }
+            })
+            document.querySelector('#forgeViewer').addEventListener('click', e => {
+                if (e.target.className == 'annotation-btn-close _wt' || e.target.className == 'annotation-btn-close') {
+                    if (e.target.style.opacity == 1) {
+                        let div = e.target.parentNode;
+                        div.remove(div);
                     }
                 }
             })
@@ -81,9 +99,6 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                     $(anid).css('left', screenpoints[i].x);
                 }
             }
-            $('.annotation').hover(() => {
-                console.log(5555);
-            });
 
             function updateAnnotationOpacity() {
                 // const dbids = viewer.model.getData().instanceTree.nodeAccess.dbIdToIndex;
@@ -102,8 +117,8 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 // fragIds.forEach(function(fragId) {
                 //     var renderProxy = viewer.impl.getRenderProxy(viewer.model, fragId)
                 //     console.log(renderProxy.geometry);
-                //var fragmentproxy = viewer.impl.getFragmentProxy(viewer.model, fragId)
-
+                // var fragmentproxy = viewer.impl.getFragmentProxy(viewer.model, fragId)
+                // console.log(viewer.model.getGeometryList());
 
                 // for (let i = 0; i < index; i++) {
                 //     let sprite = particle[i].point;
