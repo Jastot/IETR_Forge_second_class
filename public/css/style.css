@@ -154,6 +154,15 @@ body {
     word-wrap: break-word;
 }
 
+.annotation-btn-close {
+    position: absolute;
+    right: -32px;
+    top: -30px;
+    background-image: url(../img/closeAnn.png);
+    background-repeat: no-repeat;
+    visibility: hidden;
+}
+
 .annotation-without-text {
     background: none;
 }

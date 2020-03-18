@@ -31,7 +31,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
             }
             let panel = this.panel;
             let index = 0;
-            let html_str;
+            let html_str = '';
             let particle = [];
             let screenpoint;
             let screenpoints = [];
@@ -52,18 +52,16 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 panel.setVisible(!panel.isVisible());
             };
             document.querySelector("#forgeViewer").addEventListener('click', e => {
-                if (panel.isVisible() == true) {
+                if (panel != null && panel.isVisible() == true) {
                     console.log(e.clientX - $("#left-col").outerWidth(), e.clientY);
                     particle[index] = viewer.clientToWorld(e.clientX - $("#left-col").outerWidth(), e.clientY);
                     if (particle[index]) {
                         screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[index].point.x, particle[index].point.y, particle[index].point.z), viewer.impl.camera);
                         let text = $("#markuptext").val();
                         if (text == '') {
-                            html_str += '<div class="annotation annotation-without-text" id="annotation_' + (index + 1) + '"' + 'style = "top: ' + screenpoint.y + 'px; left: ' + screenpoint.x + 'px;"' +
-                                '>' + '<span class="annotationIndex">' + (index + 1) + '</span>' + '<span>' + '</span></div>';
+                            html_str += `<div class="annotation annotation-without-text" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span></span></div>`;
                         } else {
-                            html_str += '<div class="annotation" id="annotation_' + (index + 1) + '"' + 'style = "top: ' + screenpoint.y + 'px; left: ' + screenpoint.x + 'px;"' +
-                                '>' + '<span class="annotationIndex">' + (index + 1) + '</span>' + '<span>' + text + '</span></div>';
+                            html_str += `<div class="annotation" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span>${text}</span></div>`;
                         }
                         $("#annotations").html(html_str);
                         index++;
@@ -83,16 +81,38 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                     $(anid).css('left', screenpoints[i].x);
                 }
             }
+            $('.annotation').hover(() => {
+                console.log(5555);
+            });
 
             function updateAnnotationOpacity() {
-                for (let i = 0; i < index; i++) {
-                    let sprite = particle[i].point;
-                    console.log(sprite);
-                    console.log(particle[i]);
-                    console.log(viewer.impl.model.getGeometryList());
-                    let dist = viewer.impl.camera.position.distanceTo(sprite);
-                    console.log(dist);
-                }
+                // const dbids = viewer.model.getData().instanceTree.nodeAccess.dbIdToIndex;
+                // const tree = viewer.model.getInstanceTree();
+                // const fragIds = [];
+                // if (tree) { // Could be null if the tree hasn't been loaded yet
+                //     for (const dbId of Object.keys(dbids)) {
+                //         tree.enumNodeFragments(
+                //             dbId,
+                //             function(fragId) { fragIds.push(fragId); },
+                //             false
+                //         );
+                //         console.log('dbId:', dbId, 'fragIds:', fragIds);
+                //     }
+                // }
+                // fragIds.forEach(function(fragId) {
+                //     var renderProxy = viewer.impl.getRenderProxy(viewer.model, fragId)
+                //     console.log(renderProxy.geometry);
+                //var fragmentproxy = viewer.impl.getFragmentProxy(viewer.model, fragId)
+
+
+                // for (let i = 0; i < index; i++) {
+                //     let sprite = particle[i].point;
+                //     //let geometry = viewer.impl.model.getGeometryList();
+                //     //console.log(geometry.geoms);
+                //     console.log(viewer.model.getFragmentList());
+                //     let dist = viewer.impl.camera.position.distanceTo(sprite);
+                //     console.log(dist);
+                // }
             }
 
             viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, () => {
