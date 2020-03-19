@@ -97,9 +97,9 @@ function prepareAppBucketTree() {
             $("#forgeViewer").empty();
             var elem = document.getElementById("textboard");
             if (elem != null) elem.parentNode.removeChild(elem);
-            var row = $(".row").children();
-            $(row[0]).removeClass('col-xs-4 col-sm-2 col-md-2').addClass('col-xs-4 col-sm-3 col-md-3');
-            $(row[1]).removeClass('col-xs-8 col-sm-8 col-md-8').addClass('col-xs-12 col-sm-9 col-md-9');
+            // var row = $(".row").children();
+            // $(row[0]).removeClass('col-xs-4 col-sm-2 col-md-2').addClass('col-xs-4 col-sm-3 col-md-3');
+            // $(row[1]).removeClass('col-xs-8 col-sm-8 col-md-8').addClass('col-xs-12 col-sm-9 col-md-9');
             var urn = data.node.id;
             getForgeToken(function(access_token) {
                 jQuery.ajax({
@@ -173,9 +173,9 @@ function deleteBucket(node) {
     $("#forgeViewer").empty();
     var elem = document.getElementById("textboard");
     if (elem != null) elem.parentNode.removeChild(elem);
-    var row = $(".row").children();
-    $(row[0]).removeClass('col-xs-4 col-sm-2 col-md-2').addClass('col-xs-4 col-sm-3 col-md-3');
-    $(row[1]).removeClass('col-xs-8 col-sm-8 col-md-8').addClass('col-xs-12 col-sm-9 col-md-9');
+    // var row = $(".row").children();
+    // $(row[0]).removeClass('col-xs-4 col-sm-2 col-md-2').addClass('col-xs-4 col-sm-3 col-md-3');
+    // $(row[1]).removeClass('col-xs-8 col-sm-8 col-md-8').addClass('col-xs-12 col-sm-9 col-md-9');
     var bucketKey = node.id;
     $.ajax({
         url: '/api/forge/oss/buckets/' + encodeURIComponent(bucketKey),
@@ -193,9 +193,9 @@ function deleteObject(node) {
     $("#forgeViewer").empty();
     var elem = document.getElementById("textboard");
     if (elem != null) elem.parentNode.removeChild(elem);
-    var row = $(".row").children();
-    $(row[0]).removeClass('col-xs-4 col-sm-2 col-md-2').addClass('col-xs-4 col-sm-3 col-md-3');
-    $(row[1]).removeClass('col-xs-8 col-sm-8 col-md-8').addClass('col-xs-12 col-sm-9 col-md-9');
+    // var row = $(".row").children();
+    // $(row[0]).removeClass('col-xs-4 col-sm-2 col-md-2').addClass('col-xs-4 col-sm-3 col-md-3');
+    // $(row[1]).removeClass('col-xs-8 col-sm-8 col-md-8').addClass('col-xs-12 col-sm-9 col-md-9');
     var bucketKey = node.parents[0];
     var objectName = node.text;
     $.ajax({
@@ -214,9 +214,9 @@ function translateObject(node) {
     $("#forgeViewer").empty();
     var elem = document.getElementById("textboard");
     if (elem != null) elem.parentNode.removeChild(elem);
-    var row = $(".row").children();
-    $(row[0]).removeClass('col-xs-4 col-sm-2 col-md-2').addClass('col-xs-4 col-sm-3 col-md-3');
-    $(row[1]).removeClass('col-xs-8 col-sm-8 col-md-8').addClass('col-xs-12 col-sm-9 col-md-9');
+    // var row = $(".row").children();
+    // $(row[0]).removeClass('col-xs-4 col-sm-2 col-md-2').addClass('col-xs-4 col-sm-3 col-md-3');
+    // $(row[1]).removeClass('col-xs-8 col-sm-8 col-md-8').addClass('col-xs-12 col-sm-9 col-md-9');
     if (node == null) node = $('#appBuckets').jstree(true).get_selected(true)[0];
     var bucketKey = node.parents[0];
     var objectKey = node.id;

@@ -2,11 +2,11 @@ html,
 body {
     min-height: 100%;
     height: 100%;
-    background-color: rgb(140, 140, 140);
+    background-color: #F2F2F2;
 }
 
 #navbar {
-    background-color: rgb(140, 140, 140);
+    background-color: #F2F2F2;
 }
 
 * {
@@ -15,7 +15,7 @@ body {
 }
 
 .fill {
-    height: calc(100vh - 100px);
+    height: calc(100vh - 10px);
 }
 
 body {
@@ -56,6 +56,17 @@ body {
     float: right;
 }
 
+#uploadFile {
+    visibility: hidden;
+    font-size: 0;
+    line-height: 0;
+    height: 0;
+}
+
+#hiddenUploadField {
+    height: 0;
+}
+
 .navbar-default {
     border: none;
     background-color: rgb(230, 230, 230);
@@ -92,6 +103,10 @@ body {
     background-color: #fff;
 }
 
+.panel {
+    margin-bottom: 0;
+}
+
 .handleSelectionExtensionIcon {
     background-image: url(https://github.com/encharm/Font-Awesome-SVG-PNG/raw/master/white/png/24/object-group.png);
     background-size: 24px;
@@ -112,6 +127,13 @@ body {
 
 #textboard {
     overflow: auto;
+    padding-left: 15px;
+    color: #333333;
+    margin-top: 10px;
+}
+
+#textboard .panel {
+    padding: 10px;
 }
 
 .MarkupIcon {
@@ -207,6 +229,7 @@ body {
     line-height: 30px;
     text-align: center;
     background: rgba(0, 0, 0, 0.8);
+    font-weight: bold;
 }
 
 .text-annotation {
@@ -252,15 +275,17 @@ body {
 }
 
 .textboard .maintext {
-    font-size: 14px;
+    line-height: 1.3;
+    font-size: 16px;
     font-family: 'Roboto', sans-serif;
 }
 
 .textboard .object {
-    color: rgb(106, 194, 223);
+    color: rgb(29, 122, 199);
     cursor: pointer;
+    font-weight: bold;
 }
 
 .textboard .object:hover {
-    color: rgb(147, 222, 247);
+    color: rgb(64, 155, 230);
 }
