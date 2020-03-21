@@ -77,11 +77,12 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                     let div = e.target.parentNode;
                     let closebtn = div.lastChild;
                     closebtn.style.opacity = 1;
-                    document.querySelector('.annotation').addEventListener('mouseleave', () => {
+                    console.log(div.id);
+                    document.querySelector(`#${div.id}`).addEventListener('mouseleave', () => {
                         closebtn.style.opacity = 0;
-                    })
+                    });
                 }
-            })
+            });
             document.querySelector('#forgeViewer').addEventListener('click', e => {
                 if (e.target.className == 'annotation-btn-close _wt' || e.target.className == 'annotation-btn-close') {
                     if (e.target.style.opacity == 1) {
@@ -89,7 +90,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                         div.remove(div);
                     }
                 }
-            })
+            });
 
             function updateScreenPosition() {
                 for (let i = 0; i < index; i++) {
