@@ -121,6 +121,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 // var fragmentproxy = viewer.impl.getFragmentProxy(viewer.model, fragId)
                 // console.log(viewer.model.getGeometryList());
                 //вфывывфвфы
+
                 // for (let i = 0; i < index; i++) {
                 //     let sprite = particle[i].point;
                 //     //let geometry = viewer.impl.model.getGeometryList();
