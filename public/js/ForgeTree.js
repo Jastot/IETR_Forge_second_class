@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    prepareAppBucketTree();
+    // prepareAppBucketTree();
     $('#refreshBuckets').click(function() {
         $('#appBuckets').jstree(true).refresh();
     });
