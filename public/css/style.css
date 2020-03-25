@@ -188,6 +188,10 @@ body {
     transition: opacity 0.5s;
 }
 
+.annotation-btn-close:hover {
+    background-image: url(../img/closeAnn_.png);
+}
+
 ._wt {
     right: 0;
     top: -35px;
