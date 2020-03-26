@@ -1,6 +1,6 @@
 const fs = require('fs');
 const express = require('express');
-const multer  = require('multer');
+const multer = require('multer');
 const { BucketsApi, ObjectsApi, PostBucketsPayload } = require('forge-apis');
 
 const { getClient, getInternalToken } = require('./common/oauth');
@@ -9,7 +9,7 @@ const config = require('../config');
 let router = express.Router();
 
 // Middleware for obtaining a token for each request.
-router.use(async (req, res, next) => {
+router.use(async(req, res, next) => {
     const token = await getInternalToken();
     req.oauth_token = token;
     req.oauth_client = getClient();
@@ -18,7 +18,7 @@ router.use(async (req, res, next) => {
 
 // GET /api/forge/oss/buckets - expects a query param 'id'; if the param is '#' or empty,
 // returns a JSON with list of buckets, otherwise returns a JSON with list of objects in bucket with given name.
-router.get('/buckets', async (req, res, next) => {
+router.get('/buckets', async(req, res, next) => {
     const bucket_name = req.query.id;
     if (!bucket_name || bucket_name === '#') {
         try {
@@ -33,7 +33,7 @@ router.get('/buckets', async (req, res, next) => {
                     children: true
                 };
             }));
-        } catch(err) {
+        } catch (err) {
             next(err);
         }
     } else {
@@ -41,6 +41,7 @@ router.get('/buckets', async (req, res, next) => {
             // Retrieve objects from Forge using the [ObjectsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/ObjectsApi.md#getObjects)
             const objects = await new ObjectsApi().getObjects(bucket_name, {}, req.oauth_client, req.oauth_token);
             res.json(objects.body.items.map((object) => {
+                //console.log(Buffer.from(object.objectId).toString('base64'));
                 return {
                     id: Buffer.from(object.objectId).toString('base64'),
                     text: object.objectKey,
@@ -48,7 +49,7 @@ router.get('/buckets', async (req, res, next) => {
                     children: false
                 };
             }));
-        } catch(err) {
+        } catch (err) {
             next(err);
         }
     }
@@ -56,48 +57,48 @@ router.get('/buckets', async (req, res, next) => {
 
 // POST /api/forge/oss/buckets - creates a new bucket.
 // Request body must be a valid JSON in the form of { "bucketKey": "<new_bucket_name>" }.
-router.post('/buckets', async (req, res, next) => {
+router.post('/buckets', async(req, res, next) => {
     let payload = new PostBucketsPayload();
     payload.bucketKey = config.credentials.client_id.toLowerCase() + '-' + req.body.bucketKey;
-    payload.policyKey = 'persistent'; 
+    payload.policyKey = 'persistent';
     try {
         // Create a bucket using [BucketsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/BucketsApi.md#createBucket).
         await new BucketsApi().createBucket(payload, {}, req.oauth_client, req.oauth_token);
         res.status(200).end();
-    } catch(err) {
+    } catch (err) {
         next(err);
     }
 });
-router.delete('/buckets/:id', function (req, res) {
+router.delete('/buckets/:id', function(req, res) {
     var id = req.params.id;
     var buckets = new BucketsApi();
     buckets.deleteBucket(id, req.oauth_client, req.oauth_token)
-      .then(function (data) {
-          res.json({ status: "success" })
-      })
-      .catch(function (error) {
-          res.status(error.statusCode).end(error.statusMessage);
-      })
-})
-router.delete('/buckets/:bkey/objects/:id', function (req, res) {
-    var bucketKey = req.params.bkey;
-    var objectName = req.params.id;
-    // call API to delete object on the bucket
-    var objects = new ObjectsApi();
-    // delete the file/object
-    objects.deleteObject(bucketKey, objectName, req.oauth_client, req.oauth_token)
-        .then(function (data) {
+        .then(function(data) {
             res.json({ status: "success" })
         })
-        .catch(function (error) {
+        .catch(function(error) {
             res.status(error.statusCode).end(error.statusMessage);
         })
 })
-// POST /api/forge/oss/objects - uploads new object to given bucket.
-// Request body must be structured as 'form-data' dictionary
-// with the uploaded file under "fileToUpload" key, and the bucket name under "bucketKey".
-router.post('/objects', multer({ dest: 'uploads/' }).single('fileToUpload'), async (req, res, next) => {
-    fs.readFile(req.file.path, async (err, data) => {
+router.delete('/buckets/:bkey/objects/:id', function(req, res) {
+        var bucketKey = req.params.bkey;
+        var objectName = req.params.id;
+        // call API to delete object on the bucket
+        var objects = new ObjectsApi();
+        // delete the file/object
+        objects.deleteObject(bucketKey, objectName, req.oauth_client, req.oauth_token)
+            .then(function(data) {
+                res.json({ status: "success" })
+            })
+            .catch(function(error) {
+                res.status(error.statusCode).end(error.statusMessage);
+            })
+    })
+    // POST /api/forge/oss/objects - uploads new object to given bucket.
+    // Request body must be structured as 'form-data' dictionary
+    // with the uploaded file under "fileToUpload" key, and the bucket name under "bucketKey".
+router.post('/objects', multer({ dest: 'uploads/' }).single('fileToUpload'), async(req, res, next) => {
+    fs.readFile(req.file.path, async(err, data) => {
         if (err) {
             next(err);
         }
@@ -105,7 +106,7 @@ router.post('/objects', multer({ dest: 'uploads/' }).single('fileToUpload'), asy
             // Upload an object to bucket using [ObjectsApi](https://github.com/Autodesk-Forge/forge-api-nodejs-client/blob/master/docs/ObjectsApi.md#uploadObject).
             await new ObjectsApi().uploadObject(req.body.bucketKey, req.file.originalname, data.length, data, {}, req.oauth_client, req.oauth_token);
             res.status(200).end();
-        } catch(err) {
+        } catch (err) {
             next(err);
         }
     });

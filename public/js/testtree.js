@@ -1,10 +1,5 @@
 $(document).ready(function() {
     prepareTree();
-    $('#testtree').on('loaded.jstree', function() {
-        $('#testtree').jstree('open_all');
-        $('#testtree').jstree(true).select_node($('#testtree').jstree(true)[0]);
-    });
-
 });
 
 function prepareTree() {
@@ -16,9 +11,8 @@ function prepareTree() {
             'data': [{
                     text: 'Общие сведения',
                     type: 'info',
-                    state: {
-                        'selected': true
-                    }
+                    state: {},
+                    id: 'info'
                 }, {
                     text: 'Компоненты',
                     type: 'components',
@@ -28,11 +22,13 @@ function prepareTree() {
                     }, {
                         text: 2,
                         type: 'child'
-                    }]
+                    }],
+                    id: 'components'
                 },
                 {
                     text: 'Принцип работы',
-                    type: 'work'
+                    type: 'work',
+                    id: 'work'
                 }, {
                     text: 'Обслуживание',
                     type: 'service',
@@ -42,7 +38,8 @@ function prepareTree() {
                     }, {
                         text: 321,
                         type: 'child'
-                    }]
+                    }],
+                    id: 'service'
                 }
             ]
         },
@@ -67,22 +64,30 @@ function prepareTree() {
             }
         },
         "plugins": ["types"]
-    });
+    }).on('loaded.jstree', function() {
+        $('#testtree').jstree('open_all');
+    }).bind("activate_node.jstree", function(evt, data) {
+        if (data != null && data.node != null) {
+            $("#forgeViewer").empty();
+            var elem = document.getElementById("textboard");
+            if (elem != null) elem.parentNode.removeChild(elem);
+            var urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZS5zdHA=';
+            getForgeToken(function(access_token) {
+                jQuery.ajax({
+                    url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn + '/manifest',
+                    headers: { 'Authorization': 'Bearer ' + access_token },
+                    success: function(res) {
+                        if (res.status === 'success') launchViewer(urn);
+                        else $("#forgeViewer").html('Преобразование всё ещё выполняется').css('color', 'white');
+                    },
+                    error: function(err) {
+                        var msgButton = 'Этот файл еще не преобразован! ' +
+                            '<button class="btn btn-xs btn-info" id="translateObject" onclick="translateObject()"><span class="glyphicon glyphicon-eye-open"></span> ' +
+                            'Начать преобразование</button>'
+                        $("#forgeViewer").html(msgButton).css('color', 'white');
+                    }
+                });
+            })
+        }
+    });;
 }
-// var data = [{
-//     text: 'Общие сведения',
-//     type: 'par'
-// }, {
-//     text: 'Компоненты',
-//     type: 'par',
-//     nodes: [{
-//         text: 1,
-//         type: 'child'
-//     }, {
-//         text: 2,
-//         type: 'child'
-//     }, {
-//         text: 'Принцип работы',
-//         type: 'par'
-//     }]
-// }];
