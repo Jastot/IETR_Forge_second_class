@@ -52,23 +52,26 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 panel.setVisible(!panel.isVisible());
             };
             document.querySelector("#forgeViewer").addEventListener('click', e => {
-                if (panel != null && panel.isVisible() == true) {
-                    console.log(e.clientX - $("#left-col").outerWidth(), e.clientY);
-                    particle[index] = viewer.clientToWorld(e.clientX - $("#left-col").outerWidth(), e.clientY);
-                    if (particle[index]) {
-                        screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[index].point.x, particle[index].point.y, particle[index].point.z), viewer.impl.camera);
-                        let text = $("#markuptext").val();
-                        if (text == '') {
-                            html_str += `<div class="annotation annotation-without-text" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span class= 'annotation-btn-close _wt'></span></div>`;
-                        } else {
-                            html_str += `<div class="annotation" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span id = 'annotationText'>${text}</span><span class= 'annotation-btn-close'></span></div>`;
+                let etClass = e.target.className;
+                if (etClass != 'annotation-btn-close _wt' && etClass != 'annotation-btn-close' && etClass != 'annotationIndex' && e.target.id != 'annotationText') {
+                    if (panel != null && panel.isVisible() == true) {
+                        console.log(e.clientX - $("#left-col").outerWidth(), e.clientY);
+                        particle[index] = viewer.clientToWorld(e.clientX - $("#left-col").outerWidth(), e.clientY);
+                        if (particle[index]) {
+                            screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[index].point.x, particle[index].point.y, particle[index].point.z), viewer.impl.camera);
+                            let text = $("#markuptext").val();
+                            if (text == '') {
+                                html_str += `<div class="annotation annotation-without-text" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span class= 'annotation-btn-close _wt'></span></div>`;
+                            } else {
+                                html_str += `<div class="annotation" id="annotation_${index + 1}" style="top:${screenpoint.y}px; left:${screenpoint.x}px;"><span class="annotationIndex">${index + 1}</span><span id = 'annotationText'>${text}</span><span class= 'annotation-btn-close'></span></div>`;
+                            }
+                            $("#annotations").html(html_str);
+                            index++;
+                            viewer.clearSelection();
+                            document.getElementById("markuptext").value = "";
+                            updateScreenPosition();
+                            updateAnnotationOpacity();
                         }
-                        $("#annotations").html(html_str);
-                        index++;
-                        viewer.clearSelection();
-                        document.getElementById("markuptext").value = "";
-                        updateScreenPosition();
-                        updateAnnotationOpacity();
                     }
                 }
             })
