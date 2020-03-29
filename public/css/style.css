@@ -170,7 +170,7 @@ body {
     font-size: 14px;
     font-family: 'Roboto', sans-serif;
     line-height: 1.2;
-    transition: opacity .5s;
+    transition: opacity 0.3s;
     word-wrap: break-word;
 }
 

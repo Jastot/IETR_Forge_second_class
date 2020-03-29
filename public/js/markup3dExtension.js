@@ -102,33 +102,19 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
             }
 
             function updateAnnotationOpacity() {
-                // const dbids = viewer.model.getData().instanceTree.nodeAccess.dbIdToIndex;
-                // const tree = viewer.model.getInstanceTree();
-                // const fragIds = [];
-                // if (tree) { // Could be null if the tree hasn't been loaded yet
-                //     for (const dbId of Object.keys(dbids)) {
-                //         tree.enumNodeFragments(
-                //             dbId,
-                //             function(fragId) { fragIds.push(fragId); },
-                //             false
-                //         );
-                //         console.log('dbId:', dbId, 'fragIds:', fragIds);
-                //     }
-                // }
-                // fragIds.forEach(function(fragId) {
-                //     var renderProxy = viewer.impl.getRenderProxy(viewer.model, fragId)
-                //     console.log(renderProxy.geometry);
-                // var fragmentproxy = viewer.impl.getFragmentProxy(viewer.model, fragId)
-                // console.log(viewer.model.getGeometryList());
+                let cam_pose = viewer.impl.camera.position;
+                for (let i = 0; i < index; i++) {
+                    let addi_point = viewer.clientToWorld(screenpoints[i].x, screenpoints[i].y);
+                    let dst1 = cam_pose.distanceTo(new THREE.Vector3(particle[i].point.x, particle[i].point.y, particle[i].point.z));
+                    let dst2 = cam_pose.distanceTo(new THREE.Vector3(addi_point.point.x, addi_point.point.y, addi_point.point.z));
+                    if (dst2 < 0.95 * dst1) {
+                        $(`#annotation_${i+1}`).css("opacity", "0");
 
-                // for (let i = 0; i < index; i++) {
-                //     let sprite = particle[i].point;
-                //     //let geometry = viewer.impl.model.getGeometryList();
-                //     //console.log(geometry.geoms);
-                //     console.log(viewer.model.getFragmentList());
-                //     let dist = viewer.impl.camera.position.distanceTo(sprite);
-                //     console.log(dist);
-                // }
+                    } else {
+                        $(`#annotation_${i+1}`).css("opacity", "1");
+                    }
+
+                }
             }
 
             viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, () => {
