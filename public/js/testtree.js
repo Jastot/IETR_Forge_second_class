@@ -69,8 +69,6 @@ function prepareTree() {
     }).bind("activate_node.jstree", function(evt, data) {
         if (data != null && data.node != null) {
             $("#forgeViewer").empty();
-            var elem = document.getElementById("textboard");
-            if (elem != null) elem.parentNode.removeChild(elem);
             var urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZS5zdHA=';
             getForgeToken(function(access_token) {
                 jQuery.ajax({

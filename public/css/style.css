@@ -95,6 +95,10 @@ body {
     background-position: center;
 }
 
+.viewer {
+    padding: 0;
+}
+
 #textboard {
     overflow: auto;
     padding-left: 15px;
@@ -267,9 +271,4 @@ body {
     cursor: pointer;
     position: absolute;
     z-index: 1;
-}
-
-.viewer {
-    padding: 0;
-    background-color: white;
 }

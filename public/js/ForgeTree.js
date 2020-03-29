@@ -94,8 +94,6 @@ function prepareAppBucketTree() {
     }).bind("activate_node.jstree", function(evt, data) {
         if (data != null && data.node != null && data.node.type == 'object') {
             $("#forgeViewer").empty();
-            var elem = document.getElementById("textboard");
-            if (elem != null) elem.parentNode.removeChild(elem);
             var urn = data.node.id;
             getForgeToken(function(access_token) {
                 jQuery.ajax({
@@ -167,8 +165,6 @@ function uploadFile() {
 
 function deleteBucket(node) {
     $("#forgeViewer").empty();
-    var elem = document.getElementById("textboard");
-    if (elem != null) elem.parentNode.removeChild(elem);
     var bucketKey = node.id;
     $.ajax({
         url: '/api/forge/oss/buckets/' + encodeURIComponent(bucketKey),
@@ -184,8 +180,6 @@ function deleteBucket(node) {
 
 function deleteObject(node) {
     $("#forgeViewer").empty();
-    var elem = document.getElementById("textboard");
-    if (elem != null) elem.parentNode.removeChild(elem);
     var bucketKey = node.parents[0];
     var objectName = node.text;
     $.ajax({
@@ -202,8 +196,6 @@ function deleteObject(node) {
 
 function translateObject(node) {
     $("#forgeViewer").empty();
-    var elem = document.getElementById("textboard");
-    if (elem != null) elem.parentNode.removeChild(elem);
     if (node == null) node = $('#appBuckets').jstree(true).get_selected(true)[0];
     var bucketKey = node.parents[0];
     var objectKey = node.id;
