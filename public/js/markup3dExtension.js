@@ -110,7 +110,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                     let addi_point = viewer.clientToWorld(screenpoints[i].x, screenpoints[i].y);
                     let dst1 = cam_pose.distanceTo(new THREE.Vector3(particle[i].point.x, particle[i].point.y, particle[i].point.z));
                     let dst2 = cam_pose.distanceTo(new THREE.Vector3(addi_point.point.x, addi_point.point.y, addi_point.point.z));
-                    if (dst2 < 0.95 * dst1) {
+                    if (dst2 < 0.98 * dst1) {
                         $(`#annotation_${i+1}`).css("opacity", "0");
 
                     } else {
