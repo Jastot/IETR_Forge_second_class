@@ -99,20 +99,17 @@ body {
     padding: 0;
 }
 
-#textboard {
-    overflow: auto;
-    padding-left: 15px;
-    color: #333333;
-    transition: right 1.2s;
-    padding-right: 5px;
-}
-
 .textboard {
     position: fixed;
     top: 101px;
     right: -100%;
     padding: 0 5px;
     font-family: 'Titillium Web', sans-serif;
+    padding-left: 15px;
+    padding-right: 5px;
+    color: #333333;
+    transition: right 1.2s;
+    overflow: auto;
 }
 
 .textboard .panel {
@@ -124,8 +121,8 @@ body {
     right: 0;
 }
 
-#textboard .panel {
-    padding: 10px;
+.textboard .panel {
+    padding: 15px;
 }
 
 .textboard .headtext {

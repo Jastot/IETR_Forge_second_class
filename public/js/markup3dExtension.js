@@ -56,7 +56,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 if (etClass != 'annotation-btn-close _wt' && etClass != 'annotation-btn-close' && etClass != 'annotationIndex' && e.target.id != 'annotationText') {
                     if (panel != null && panel.isVisible() == true) {
                         console.log(e.clientX - $("#left-col").outerWidth(), e.clientY);
-                        particle[index] = viewer.clientToWorld(e.clientX - $("#left-col").outerWidth(), e.clientY);
+                        particle[index] = viewer.clientToWorld(e.clientX - $("#left-col").outerWidth(), e.clientY - $('#navbar').outerHeight() - 30);
                         if (particle[index]) {
                             screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[index].point.x, particle[index].point.y, particle[index].point.z), viewer.impl.camera);
                             let text = $("#markuptext").val();
@@ -107,9 +107,9 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
             function updateAnnotationOpacity() {
                 let cam_pose = viewer.impl.camera.position;
                 for (let i = 0; i < index; i++) {
-                    let addi_point = viewer.clientToWorld(screenpoints[i].x, screenpoints[i].y);
-                    let dst1 = cam_pose.distanceTo(new THREE.Vector3(particle[i].point.x, particle[i].point.y, particle[i].point.z));
-                    let dst2 = cam_pose.distanceTo(new THREE.Vector3(addi_point.point.x, addi_point.point.y, addi_point.point.z));
+                    let close_p = viewer.clientToWorld(screenpoints[i].x, screenpoints[i].y);
+                    let dst1 = cam_pose.distanceTo(particle[i].point);
+                    let dst2 = cam_pose.distanceTo(close_p.point);
                     if (dst2 < 0.98 * dst1) {
                         $(`#annotation_${i+1}`).css("opacity", "0");
 
