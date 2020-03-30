@@ -64,13 +64,18 @@ body {
     margin-bottom: 0;
 }
 
-.tree {
+.tree .panel {
     font-size: 20px;
     font-family: 'Titillium Web', sans-serif;
     border: 3px solid #FFA840;
     border-radius: 10px;
     overflow: auto;
     padding-top: 5px;
+}
+
+.tree .panel,
+.textboard .panel {
+    box-shadow: 0 0 10px rgba(255, 0, 0, 0.5);
 }
 
 .jstree-default .jstree-hovered {
@@ -106,15 +111,19 @@ body {
     padding: 0 5px;
     font-family: 'Titillium Web', sans-serif;
     padding-left: 15px;
-    padding-right: 5px;
+    padding-right: 15px;
     color: #333333;
     transition: right 1.2s;
-    overflow: auto;
+    max-height: calc(100vh - 111px);
 }
 
 .textboard .panel {
     border: 3px solid #FFA840;
     border-radius: 10px;
+}
+
+.textboard .textInfo {
+    max-height: calc(100vh - 111px);
 }
 
 .slide-pos {
@@ -123,6 +132,8 @@ body {
 
 .textboard .panel {
     padding: 15px;
+    overflow-y: scroll;
+    max-height: calc(100vh - 111px);
 }
 
 .textboard .headtext {

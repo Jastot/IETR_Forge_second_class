@@ -55,8 +55,8 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 let etClass = e.target.className;
                 if (etClass != 'annotation-btn-close _wt' && etClass != 'annotation-btn-close' && etClass != 'annotationIndex' && e.target.id != 'annotationText') {
                     if (panel != null && panel.isVisible() == true) {
-                        console.log(e.clientX - $("#left-col").outerWidth(), e.clientY);
-                        particle[index] = viewer.clientToWorld(e.clientX - $("#left-col").outerWidth(), e.clientY - $('#navbar').outerHeight() - 30);
+                        console.log(e.clientX - $("#tree").outerWidth(), e.clientY);
+                        particle[index] = viewer.clientToWorld(e.clientX - $("#tree").outerWidth(), e.clientY - $('#navbar').outerHeight() - 30);
                         if (particle[index]) {
                             screenpoint = viewer.impl.worldToClient(new THREE.Vector3(particle[index].point.x, particle[index].point.y, particle[index].point.z), viewer.impl.camera);
                             let text = $("#markuptext").val();
