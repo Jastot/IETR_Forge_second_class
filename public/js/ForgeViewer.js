@@ -13,6 +13,9 @@ function launchViewer(urn) {
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
     });
 }
+let check = false;
+var components;
+var comp_data;
 
 function onDocumentLoadSuccess(doc) {
     var viewables = doc.getRoot().getDefaultGeometry();
@@ -24,10 +27,17 @@ function onDocumentLoadSuccess(doc) {
         // console.log(ext);
         // console.log(ext.isActive());
         viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, function() {
-            var components = buildModelTree(viewer.model);
-            console.log(components);
-            prepareTree(components);
-            $('#testtree2').jstree(true).refresh();
+            if (check == false) {
+                components = buildModelTree(viewer.model);
+                console.log(components);
+                comp_data = components;
+                console.log(comp_data.children);
+                let chi = get_children(comp_data.children);
+                $('#testtree').jstree(true).settings.core.data = get_new_data(chi);
+                console.log(chi);
+                $('#testtree').jstree("refresh");
+            }
+            check = true;
         })
     });
 }
@@ -80,4 +90,57 @@ function getActiveConfigurationProperties(viewer) {
             }
         })
     })
+}
+
+
+function get_new_data(child_data) {
+    return [{
+            text: 'Общие сведения',
+            type: 'info',
+            state: {},
+            id: 'info'
+        }, {
+            text: 'Компоненты',
+            type: 'components',
+            children: child_data
+
+        },
+        {
+            text: 'Дурка',
+            type: 'components',
+            id: 'durka'
+        },
+        {
+            text: 'Принцип работы',
+            type: 'work',
+            id: 'work'
+        },
+        {
+            text: 'Обслуживание',
+            type: 'service',
+            children: [{
+                text: 123,
+                type: 'child'
+            }, {
+                text: 321,
+                type: 'child'
+            }],
+            id: 'service'
+        }
+    ];
+}
+
+function get_children(arr) {
+    let clone = [];
+    for (const i in arr) {
+        if (arr[i].children instanceof Array && arr[i].children.length > 1 && arr[i].name != "Solid1") {
+            clone[i] = {
+                text: `${arr[i].name}`,
+                children: get_children(arr[i].children)
+            };
+            continue;
+        }
+        clone[i] = { text: `${arr[i].name}` };
+    }
+    return clone;
 }
