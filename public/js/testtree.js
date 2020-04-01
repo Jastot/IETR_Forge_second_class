@@ -1,7 +1,8 @@
 $(document).ready(function() {
-    prepareTree(null);
+    prepareTree();
 });
 
+<<<<<<< Updated upstream
 function prepareTree(components) {
     if (components == null) {
         $('#testtree').jstree({
@@ -37,6 +38,51 @@ function prepareTree(components) {
                         id: 'service'
                     }
                 ]
+=======
+function prepareTree() {
+
+    $('#testtree').jstree({
+        'core': {
+            'multiple': false,
+            'check_callback': true,
+            'themes': { "icons": true },
+            'data': [{
+                    text: 'Общие сведения',
+                    type: 'info',
+                    state: {
+                        selected: true
+                    },
+                    id: 'info'
+                }, {
+                    text: 'Компоненты',
+                    type: 'components',
+                    id: 'components'
+                },
+                {
+                    text: 'Принцип работы',
+                    type: 'work',
+                    id: 'work'
+                }, {
+                    text: 'Обслуживание',
+                    type: 'service',
+                    children: [{
+                        text: 123,
+                        type: 'child'
+                    }, {
+                        text: 321,
+                        type: 'child'
+                    }],
+                    id: 'service'
+                }
+            ]
+        },
+        "types": {
+            "default": {
+                "icon": false
+            },
+            "info": {
+                "icon": "glyphicon glyphicon-book"
+>>>>>>> Stashed changes
             },
             "types": {
                 "default": {
@@ -163,25 +209,18 @@ function buildModelTree(model, createNodeFunc = null) {
 
         instanceTree.enumNodeChildren(node.dbId,
             function(childId) {
-
                 var childNode = null;
-
                 if (createNodeFunc) {
-
                     childNode = createNodeFunc(childId);
-
                 } else {
-
                     node.children = node.children || [];
 
                     childNode = {
                         dbId: childId,
                         name: instanceTree.getNodeName(childId)
                     }
-
                     node.children.push(childNode);
                 }
-
                 _buildModelTreeRec(childNode);
             });
     }

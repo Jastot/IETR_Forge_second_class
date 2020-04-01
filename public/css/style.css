@@ -54,11 +54,10 @@ p {
 }
 
 .tree .panel {
-    font-size: 20px;
+    font-size: 18px;
     font-family: 'Titillium Web', sans-serif;
     border: 3px solid #FFA840;
     border-radius: 10px;
-    overflow: auto;
     padding-top: 5px;
 }
 
