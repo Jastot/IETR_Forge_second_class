@@ -17,6 +17,10 @@ p {
     margin: 0;
 }
 
+.transition-width {
+    transition: width 0.4s;
+}
+
 .navbar {
     background-color: #FFCE73;
     border-radius: 0 0 30px 30px;
@@ -40,26 +44,24 @@ p {
     line-height: 51px;
 }
 
-#appBuckets {
-    width: 100%;
-}
-
-#forgeViewer {
-    width: 100%;
-    background-color: white;
-}
-
 .panel {
     margin-bottom: 0;
 }
 
 .tree .panel {
-    font-size: 20px;
     font-family: 'Titillium Web', sans-serif;
     border: 3px solid #FFA840;
     border-radius: 10px;
-    overflow: auto;
-    padding-top: 5px;
+    padding: 5px 4px 0 4px;
+}
+
+#testtree {
+    max-height: calc(100vh - 125px);
+    overflow-y: auto;
+}
+
+#testtree .jstree-container-ul {
+    padding-bottom: 5px;
 }
 
 .tree .panel,
@@ -73,6 +75,14 @@ p {
 
 .jstree-default .jstree-clicked {
     background: rgb(255, 217, 159);
+}
+
+.jstree-node {
+    font-size: 18px;
+}
+
+.jstree-children {
+    font-size: 16px;
 }
 
 .handleSelectionExtensionIcon {
@@ -97,18 +107,17 @@ p {
     position: fixed;
     top: 101px;
     right: -100%;
-    padding: 0 5px;
+    padding: 0 15px;
     font-family: 'Titillium Web', sans-serif;
-    padding-left: 15px;
-    padding-right: 15px;
     color: #333333;
     text-align: justify;
     transition: right 1.2s;
 }
 
 .textboard .textInfo {
-    overflow-y: scroll;
+    overflow-y: auto;
     padding-right: 10px;
+    padding-bottom: 5px;
     max-height: calc(100vh - 127px);
 }
 
@@ -125,6 +134,7 @@ p {
 .textboard .headtext {
     font-size: 24px;
     font-weight: 700;
+    line-height: 1.5;
 }
 
 .textboard .maintext {
@@ -269,6 +279,7 @@ p {
 
 ::-webkit-scrollbar {
     width: 4px;
+    height: 4px;
 }
 
 ::-webkit-scrollbar-thumb {
