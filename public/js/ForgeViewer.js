@@ -26,11 +26,7 @@ function launchViewer(urn) {
         var documentId = 'urn:' + urn;
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
     });
-} <<
-<< << < HEAD
-    ===
-    === = >>>
-    >>> > kham
+}
 var components;
 var comp_data;
 
@@ -44,7 +40,6 @@ function onDocumentLoadSuccess(doc) {
         // console.log(ext);
         // console.log(ext.isActive());
         viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, function() {
-
             components = buildModelTree(viewer.model);
             comp_data = components;
             let chi = get_children(comp_data.children);
@@ -63,8 +58,7 @@ function onDocumentLoadSuccess(doc) {
                     $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
                     $(row[1]).removeClass('col-sm-6 col-md-6').addClass('col-sm-7 col-md-7');
                 }
-            }); >>>
-            >>> > kham
+            });
         })
     })
 }
@@ -119,15 +113,13 @@ function getActiveConfigurationProperties(viewer) {
 }
 
 
-function get_new_data(child_data) { ===
-    === =
+function get_new_data(child_data) {
     return {
         text: 'Компоненты',
         type: 'components',
         id: 'components',
         children: child_data
-    } >>>
-    >>> > kham
+    }
 }
 
 function get_children(arr) {

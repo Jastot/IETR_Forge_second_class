@@ -3,9 +3,6 @@ $(document).ready(function() {
 });
 
 function prepareTree() {
-
-    >>>
-    >>> > kham
     $('#testtree').jstree({
         'core': {
             'multiple': false,
@@ -14,8 +11,6 @@ function prepareTree() {
             'data': [{
                     text: 'Общие сведения',
                     type: 'info',
-
-
                     state: {
                         selected: true
                     },
@@ -64,7 +59,6 @@ function prepareTree() {
             }
         },
         "plugins": ["types"]
-
     })
 }
 
