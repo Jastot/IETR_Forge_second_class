@@ -1,4 +1,18 @@
 var viewer;
+$(document).ready(function() {
+    $("#forgeViewer").empty();
+    var urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZS5zdHA=';
+    getForgeToken(function(access_token) {
+        jQuery.ajax({
+            url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn + '/manifest',
+            headers: { 'Authorization': 'Bearer ' + access_token },
+            success: function(res) {
+                if (res.status === 'success') launchViewer(urn);
+                else $("#forgeViewer").html('Преобразование всё ещё выполняется').css('color', 'white');
+            }
+        });
+    })
+});
 
 function launchViewer(urn) {
     var options = {
@@ -12,8 +26,11 @@ function launchViewer(urn) {
         var documentId = 'urn:' + urn;
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
     });
-}
-let check = false;
+} <<
+<< << < HEAD
+    ===
+    === = >>>
+    >>> > kham
 var components;
 var comp_data;
 
@@ -27,19 +44,29 @@ function onDocumentLoadSuccess(doc) {
         // console.log(ext);
         // console.log(ext.isActive());
         viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, function() {
-            if (check == false) {
-                components = buildModelTree(viewer.model);
-                console.log(components);
-                comp_data = components;
-                console.log(comp_data.children);
-                let chi = get_children(comp_data.children);
-                $('#testtree').jstree(true).settings.core.data = get_new_data(chi);
-                console.log(chi);
-                $('#testtree').jstree("refresh");
-            }
-            check = true;
+
+            components = buildModelTree(viewer.model);
+            comp_data = components;
+            let chi = get_children(comp_data.children);
+            $('#testtree').jstree(true).settings.core.data[1] = get_new_data(chi);
+            $('#testtree').jstree(true).refresh();
+            $("#testtree").on("open_node.jstree", function(e, data) {
+                if (data.node.id === 'components') {
+                    var row = $(".row").children();
+                    $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
+                    $(row[1]).removeClass('col-sm-7 col-md-7').addClass('col-sm-6 col-md-6');
+                }
+            });
+            $("#testtree").on("close_node.jstree", function(e, data) {
+                if (data.node.id === 'components') {
+                    var row = $(".row").children();
+                    $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
+                    $(row[1]).removeClass('col-sm-6 col-md-6').addClass('col-sm-7 col-md-7');
+                }
+            }); >>>
+            >>> > kham
         })
-    });
+    })
 }
 
 function getAlldbIds(rootId) {
@@ -85,7 +112,6 @@ function getActiveConfigurationProperties(viewer) {
                 viewer.getProperties(prop.displayValue, confProps => {
                     console.log(confProps);
                 });
-
                 return;
             }
         })
@@ -93,41 +119,15 @@ function getActiveConfigurationProperties(viewer) {
 }
 
 
-function get_new_data(child_data) {
-    return [{
-            text: 'Общие сведения',
-            type: 'info',
-            state: {},
-            id: 'info'
-        }, {
-            text: 'Компоненты',
-            type: 'components',
-            children: child_data
-
-        },
-        {
-            text: 'Дурка',
-            type: 'components',
-            id: 'durka'
-        },
-        {
-            text: 'Принцип работы',
-            type: 'work',
-            id: 'work'
-        },
-        {
-            text: 'Обслуживание',
-            type: 'service',
-            children: [{
-                text: 123,
-                type: 'child'
-            }, {
-                text: 321,
-                type: 'child'
-            }],
-            id: 'service'
-        }
-    ];
+function get_new_data(child_data) { ===
+    === =
+    return {
+        text: 'Компоненты',
+        type: 'components',
+        id: 'components',
+        children: child_data
+    } >>>
+    >>> > kham
 }
 
 function get_children(arr) {
