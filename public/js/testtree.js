@@ -12,13 +12,12 @@ function prepareTree() {
             'data': [{
                     text: 'Общие сведения',
                     type: 'info',
-                    state: {
-                        selected: true
-                    },
+                    state: {},
                     id: 'info'
                 }, {
                     text: 'Компоненты',
                     type: 'components',
+                    children: {},
                     id: 'components'
                 },
                 {
@@ -41,33 +40,25 @@ function prepareTree() {
         },
         "types": {
             "default": {
-                "icon": false
+                "icon": "glyphicon glyphicon-flash"
             },
             "info": {
                 "icon": "glyphicon glyphicon-book"
             },
-            "types": {
-                "default": {
-                    "icon": "glyphicon glyphicon-flash"
-                },
-                "info": {
-                    "icon": "glyphicon glyphicon-book"
-                },
-                "work": {
-                    "icon": "glyphicon glyphicon-cog"
-                },
-                "components": {
-                    "icon": "glyphicon glyphicon-list-alt"
-                },
-                "service": {
-                    "icon": "glyphicon glyphicon-wrench"
-                },
-                "child": {
-                    "icon": "glyphicon glyphicon-menu-right"
-                }
+            "work": {
+                "icon": "glyphicon glyphicon-cog"
             },
-            "plugins": ["types"]
-        }
+            "components": {
+                "icon": "glyphicon glyphicon-list-alt"
+            },
+            "service": {
+                "icon": "glyphicon glyphicon-wrench"
+            },
+            "child": {
+                "icon": "glyphicon glyphicon-menu-right"
+            }
+        },
+        "plugins": ["types"]
     }).bind("activate_node.jstree", function(evt, data) {
         if (data != null && data.node != null) {
             $("#forgeViewer").empty();
@@ -84,8 +75,8 @@ function prepareTree() {
             })
         }
     });
-}
 
+}
 
 function buildModelTree(model, createNodeFunc = null) {
 
