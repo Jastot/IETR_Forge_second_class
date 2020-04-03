@@ -21,11 +21,18 @@ function launchViewer(urn) {
     };
 
     Autodesk.Viewing.Initializer(options, () => {
-        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['HandleSelectionExtension', 'Markup3dExtension'] });
+        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
+            extensions: ['HandleSelectionExtension', 'Markup3dExtension']
+                //disabledExtensions: { explode: true, bimwalk: true, settings: true, propertiesmanager: true, modelstructure: true }
+        });
         viewer.start();
+        //viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
         var documentId = 'urn:' + urn;
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
 
+        // viewer.loadExtension('Autodesk.ModelStructure', viewer.config).then(ext => {
+        //     viewer.addEventListener(Autodesk.Viewing.TOOLBAR_CREATED_EVENT, onToolbarCreated);
+        // });
         // viewer.addEventListener(Autodesk.Viewing.TOOLBAR_CREATED_EVENT, onToolbarCreated);
 
         // viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => {
@@ -66,8 +73,8 @@ var comp_data;
 
 // const onToolbarCreated = (e) => {
 //     console.log(e);
-//     const settingsTools = viewer.toolbar.getControl('settingsTools');
-//     console.log(settingsTools);
+//     let settingsTools = e.target.toolbar.getControl('settingsTools')
+//     settingsTools.removeControl('toolbar-modelStructureTool');
 //     // settingsTools.removeControl("toolbar-modelStructureTool");
 //     // settingsTools.removeControl('toolbar-propertiesTool');
 //     // settingsTools.removeControl('toolbar-settingsTool');
@@ -86,6 +93,7 @@ var comp_data;
 function onDocumentLoadSuccess(doc) {
     var viewables = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, viewables).then(i => {
+        //viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
         // documented loaded, any action?
         // viewer.loadExtension('Autodesk.ModelStructure');
         // let ext = viewer.getExtension('Autodesk.ModelStructure');
