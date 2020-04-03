@@ -290,3 +290,27 @@ p {
 ::-webkit-scrollbar-thumb:hover {
     background-color: rgba(0, 0, 0, 0.5);
 }
+
+.adsk-viewing-viewer #toolbar-modelStructureTool {
+    display: none!important
+}
+
+.adsk-viewing-viewer #toolbar-explodeTool {
+    display: none!important
+}
+
+.adsk-viewing-viewer #toolbar-propertiesTool {
+    display: none!important
+}
+
+.adsk-viewing-viewer #toolbar-fullscreenTool {
+    display: none!important
+}
+
+.adsk-viewing-viewer #toolbar-settingsTool {
+    display: none!important
+}
+
+.adsk-viewing-viewer #toolbar-bimWalkTool {
+    display: none!important
+}

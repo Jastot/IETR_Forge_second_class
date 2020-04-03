@@ -21,14 +21,67 @@ function launchViewer(urn) {
     };
 
     Autodesk.Viewing.Initializer(options, () => {
-        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['Autodesk.DocumentBrowser', 'HandleSelectionExtension', 'Markup3dExtension'] });
+        viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), { extensions: ['HandleSelectionExtension', 'Markup3dExtension'] });
         viewer.start();
         var documentId = 'urn:' + urn;
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
+
+        // viewer.addEventListener(Autodesk.Viewing.TOOLBAR_CREATED_EVENT, onToolbarCreated);
+
+        // viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => {
+        //     console.log(viewer.loadedExtensions);
+        //     let arr = ["Autodesk.ModelStructure", "Autodesk.PropertiesManager", "Autodesk.BimWalk", "Autodesk.Explode"];
+        //     for (let i in arr) {
+        //         let Extension = viewer.getExtension(arr[i]);
+        //         Extension.unload();
+        //     }
+        //     console.log(viewer.loadedExtensions);
+        // });
+
+
+        // const onExtensionLoaded = (e) => {
+
+        //     if (e.extensionId === 'Autodesk.BimWalk') {
+
+        //         const navTools = viewer.toolbar.getControl('navTools')
+
+        //         navTools.removeControl('toolbar-bimWalkTool')
+
+        //         viewer.removeEventListener(
+        //             Autodesk.Viewing.EXTENSION_LOADED_EVENT,
+        //             onExtensionLoaded)
+        //     }
+        // }
+
+        // viewer.addEventListener(
+        //     Autodesk.Viewing.EXTENSION_LOADED_EVENT,
+        //     onExtensionLoaded)
+
+
+
     });
 }
 var components;
 var comp_data;
+
+// const onToolbarCreated = (e) => {
+//     console.log(e);
+//     const settingsTools = viewer.toolbar.getControl('settingsTools');
+//     console.log(settingsTools);
+//     // settingsTools.removeControl("toolbar-modelStructureTool");
+//     // settingsTools.removeControl('toolbar-propertiesTool');
+//     // settingsTools.removeControl('toolbar-settingsTool');
+//     // settingsTools.removeControl('toolbar-fullscreenTool');
+
+//     // let modelTools = viewer.toolbar.getControl('modelTools');
+//     // modelTools.removeControl('toolbar-explodeTool')
+//     //     // settingsTools.removeControl('toolbar-propertiesTool') 
+//     //     //toolbar-explodeTool  toolbar-propertiesTool toolbar-bimWalkTool
+
+//     viewer.removeEventListener(
+//         Autodesk.Viewing.TOOLBAR_CREATED_EVENT,
+//         onToolbarCreated)
+// }
 
 function onDocumentLoadSuccess(doc) {
     var viewables = doc.getRoot().getDefaultGeometry();
@@ -128,12 +181,16 @@ function get_children(arr) {
         if (arr[i].children instanceof Array && arr[i].children.length > 1) {
             clone[i] = {
                 text: `${arr[i].name}`,
+                id: `comp_${arr[i].dbId}`,
                 children: get_children(arr[i].children)
             };
             continue;
         }
         if (arr[i].name != "Solid1")
-            clone[i] = { text: `${arr[i].name}` };
+            clone[i] = {
+                text: `${arr[i].name}`,
+                id: `comp_${arr[i].dbId}`,
+            };
     }
     return clone;
 }
