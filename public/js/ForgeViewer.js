@@ -26,7 +26,7 @@ function launchViewer(urn) {
                 //disabledExtensions: { explode: true, bimwalk: true, settings: true, propertiesmanager: true, modelstructure: true }
         });
         viewer.start();
-        //viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+        viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
         var documentId = 'urn:' + urn;
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
 
@@ -93,7 +93,7 @@ var comp_data;
 function onDocumentLoadSuccess(doc) {
     var viewables = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, viewables).then(i => {
-        //viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+        viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
         // documented loaded, any action?
         // viewer.loadExtension('Autodesk.ModelStructure');
         // let ext = viewer.getExtension('Autodesk.ModelStructure');
