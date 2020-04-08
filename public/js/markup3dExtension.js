@@ -153,6 +153,7 @@ function TextPanel(viewer, container, id, title, options) {
     textarea.classList.add('text-annotation');
     textarea.placeholder = 'Введите текст пометки';
     textarea.id = 'markuptext';
+    textarea.maxLength = 100;
     this.container.appendChild(textarea);
 }
 

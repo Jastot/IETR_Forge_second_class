@@ -8,7 +8,7 @@ $(document).ready(function() {
             headers: { 'Authorization': 'Bearer ' + access_token },
             success: function(res) {
                 if (res.status === 'success') launchViewer(urn);
-                else $("#forgeViewer").html('Преобразование всё ещё выполняется').css('color', 'white');
+                else $("#forgeViewer").html('Преобразование всё ещё выполняется').css('color', 'lightblue');
             }
         });
     })
@@ -104,7 +104,9 @@ function onDocumentLoadSuccess(doc) {
             components = buildModelTree(viewer.model);
             comp_data = components;
             let chi = get_children(comp_data.children);
+            var isolated;
             $('#testtree').jstree(true).settings.core.data[1] = get_new_data(chi);
+            console.log(chi);
             $('#testtree').jstree(true).refresh();
             $("#testtree").on("open_node.jstree", function(e, data) {
                 if (data.node.id === 'components') {
@@ -118,6 +120,21 @@ function onDocumentLoadSuccess(doc) {
                     var row = $(".row").children();
                     $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
                     $(row[1]).removeClass('col-sm-6 col-md-6').addClass('col-sm-7 col-md-7');
+                    viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+                }
+            });
+            $('#testtree').on("activate_node.jstree", function(evt, data) {
+                if (data != null && data.node != null && data.node.type == 'object') {
+                    let str = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
+                    console.log(str);
+                    if (isolated != str) {
+                        viewer.isolate(Number(str));
+                        viewer.fitToView(Number(str));
+                        isolated = str;
+                    } else {
+                        isolated = 0;
+                        viewer.isolate(Number(isolated));
+                    }
                 }
             });
         })
@@ -186,11 +203,13 @@ function get_new_data(child_data) {
 function get_children(arr) {
     let clone = [];
     for (const i in arr) {
+        console.log(arr[i].dbId);
         if (arr[i].children instanceof Array && arr[i].children.length > 1) {
             clone[i] = {
                 text: `${arr[i].name}`,
                 id: `comp_${arr[i].dbId}`,
-                children: get_children(arr[i].children)
+                children: get_children(arr[i].children),
+                type: 'object'
             };
             continue;
         }
@@ -198,6 +217,7 @@ function get_children(arr) {
             clone[i] = {
                 text: `${arr[i].name}`,
                 id: `comp_${arr[i].dbId}`,
+                type: 'object'
             };
     }
     return clone;

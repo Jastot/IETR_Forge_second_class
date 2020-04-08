@@ -23,7 +23,7 @@ window.addEventListener('click', e => {
             viewer.fitToView(array[0]);
         }
         if ((e.target.id) == "korpus") {
-            let array = 4;
+            let array = 3;
             viewer.isolate(array);
             viewer.fitToView(array);
         }

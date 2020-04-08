@@ -56,6 +56,9 @@ function prepareTree() {
             },
             "child": {
                 "icon": "glyphicon glyphicon-menu-right"
+            },
+            "object": {
+                "icon": false
             }
         },
         "plugins": ["types"]
