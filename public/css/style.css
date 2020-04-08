@@ -55,12 +55,12 @@ p {
     padding: 5px 4px 0 4px;
 }
 
-#testtree {
+#compTree {
     max-height: calc(100vh - 125px);
-    overflow-y: auto;
+    overflow: auto;
 }
 
-#testtree .jstree-container-ul {
+#compTree .jstree-container-ul {
     padding-bottom: 5px;
 }
 

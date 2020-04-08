@@ -3,7 +3,7 @@ $(document).ready(function() {
 });
 
 function prepareTree() {
-    $('#testtree').jstree({
+    $('#compTree').jstree({
         'core': {
             'multiple': false,
             'check_callback': true,
@@ -94,4 +94,36 @@ function buildModelTree(model, createNodeFunc = null) {
     _buildModelTreeRec(rootNode);
 
     return rootNode;
+}
+
+function get_new_data(child_data) {
+    return {
+        text: 'Компоненты',
+        type: 'components',
+        id: 'components',
+        children: child_data
+    }
+}
+
+function get_children(arr) {
+    let clone = [];
+    for (const i in arr) {
+        console.log(arr[i].dbId);
+        if (arr[i].children instanceof Array && arr[i].children.length > 1) {
+            clone[i] = {
+                text: `${arr[i].name}`,
+                id: `comp_${arr[i].dbId}`,
+                children: get_children(arr[i].children),
+                type: 'object'
+            };
+            continue;
+        }
+        if (arr[i].name != "Solid1")
+            clone[i] = {
+                text: `${arr[i].name}`,
+                id: `comp_${arr[i].dbId}`,
+                type: 'object'
+            };
+    }
+    return clone;
 }

@@ -105,17 +105,16 @@ function onDocumentLoadSuccess(doc) {
             comp_data = components;
             let chi = get_children(comp_data.children);
             var isolated;
-            $('#testtree').jstree(true).settings.core.data[1] = get_new_data(chi);
-            console.log(chi);
-            $('#testtree').jstree(true).refresh();
-            $("#testtree").on("open_node.jstree", function(e, data) {
+            $('#compTree').jstree(true).settings.core.data[1] = get_new_data(chi);
+            $('#compTree').jstree(true).refresh();
+            $("#compTree").on("open_node.jstree", function(e, data) {
                 if (data.node.id === 'components') {
                     var row = $(".row").children();
                     $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
                     $(row[1]).removeClass('col-sm-7 col-md-7').addClass('col-sm-6 col-md-6');
                 }
             });
-            $("#testtree").on("close_node.jstree", function(e, data) {
+            $("#compTree").on("close_node.jstree", function(e, data) {
                 if (data.node.id === 'components') {
                     var row = $(".row").children();
                     $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
@@ -123,7 +122,7 @@ function onDocumentLoadSuccess(doc) {
                     viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
                 }
             });
-            $('#testtree').on("activate_node.jstree", function(evt, data) {
+            $('#compTree').on("activate_node.jstree", function(evt, data) {
                 if (data != null && data.node != null && data.node.type == 'object') {
                     let str = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
                     console.log(str);
@@ -188,37 +187,4 @@ function getActiveConfigurationProperties(viewer) {
             }
         })
     })
-}
-
-
-function get_new_data(child_data) {
-    return {
-        text: 'Компоненты',
-        type: 'components',
-        id: 'components',
-        children: child_data
-    }
-}
-
-function get_children(arr) {
-    let clone = [];
-    for (const i in arr) {
-        console.log(arr[i].dbId);
-        if (arr[i].children instanceof Array && arr[i].children.length > 1) {
-            clone[i] = {
-                text: `${arr[i].name}`,
-                id: `comp_${arr[i].dbId}`,
-                children: get_children(arr[i].children),
-                type: 'object'
-            };
-            continue;
-        }
-        if (arr[i].name != "Solid1")
-            clone[i] = {
-                text: `${arr[i].name}`,
-                id: `comp_${arr[i].dbId}`,
-                type: 'object'
-            };
-    }
-    return clone;
 }
