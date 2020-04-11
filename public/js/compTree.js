@@ -65,6 +65,7 @@ function prepareTree() {
     })
 }
 
+
 function buildModelTree(model, createNodeFunc = null) {
     //builds model tree recursively
     function _buildModelTreeRec(node) {
@@ -118,12 +119,13 @@ function get_children(arr) {
             };
             continue;
         }
-        if (arr[i].name != "Solid1")
+        if (arr[i].name != "Solid1") {
             clone[i] = {
                 text: `${arr[i].name}`,
                 id: `comp_${arr[i].dbId}`,
                 type: 'object'
             };
+        }
     }
     return clone;
 }
