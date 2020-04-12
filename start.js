@@ -1,6 +1,6 @@
 const path = require('path');
 const express = require('express');
-
+require('dotenv').config();
 const PORT = process.env.PORT || 3000;
 const config = require('./config');
 if (config.credentials.client_id == null || config.credentials.client_secret == null) {
@@ -22,6 +22,7 @@ app.use((err, req, res, next) => {
 });
 
 var db_url = process.env.MONGODB_URI;
+console.log(db_url);
 MongoClient.connect(db_url, { useUnifiedTopology: true }, function(err, database) {
     if (err) {
         return console.log(err);
