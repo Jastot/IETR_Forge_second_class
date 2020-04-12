@@ -111,7 +111,7 @@ p {
     font-family: 'Titillium Web', sans-serif;
     color: #333333;
     text-align: justify;
-    transition: right 1.2s;
+    transition: right 1s;
 }
 
 .textboard .textInfo {
@@ -135,20 +135,22 @@ p {
     font-size: 24px;
     font-weight: 700;
     line-height: 1.5;
+    text-align: center;
 }
 
 .textboard .maintext {
     line-height: 1.5;
     font-size: 18px;
+    margin-top: 10px;
 }
 
-.textboard .object {
+.textboard .link {
     color: rgb(29, 122, 199);
     cursor: pointer;
     font-weight: bold;
 }
 
-.textboard .object:hover {
+.textboard .link:hover {
     color: rgb(64, 155, 230);
 }
 

@@ -107,6 +107,7 @@ function onDocumentLoadSuccess(doc) {
             var isolated;
             $('#compTree').jstree(true).settings.core.data[1] = get_new_data(chi);
             $('#compTree').jstree(true).refresh();
+            // console.log(JSON.stringify(array));
             $("#compTree").on("open_node.jstree", function(e, data) {
                 if (data.node.id === 'components') {
                     var row = $(".row").children();
@@ -124,12 +125,25 @@ function onDocumentLoadSuccess(doc) {
             });
             $('#compTree').on("activate_node.jstree", function(evt, data) {
                 if (data != null && data.node != null && data.node.type == 'object') {
-                    let str = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
-                    console.log(str);
-                    if (isolated != str) {
-                        viewer.isolate(Number(str));
-                        viewer.fitToView(Number(str));
-                        isolated = str;
+                    let dbid = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
+                    $.ajax({
+                        url: '/texts/' + dbid,
+                        type: 'GET',
+                        success: function(res) {
+                            let name = res.name;
+                            let text = res.text;
+                            console.log(name);
+                            console.log(text);
+                            adjustLayout(name, text);
+                        },
+                        error: function(err) {
+                            console.log(err);
+                        }
+                    });
+                    if (isolated != dbid) {
+                        viewer.isolate(Number(dbid));
+                        viewer.fitToView(Number(dbid));
+                        isolated = dbid;
                     } else {
                         isolated = 0;
                         viewer.isolate(Number(isolated));
