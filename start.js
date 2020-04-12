@@ -21,16 +21,17 @@ app.use((err, req, res, next) => {
     res.status(err.statusCode).json(err);
 });
 
-MongoClient.connect('mongodb://localhost:27017/', { useUnifiedTopology: true }, function(err, database) {
+var db_url = process.env.MONGODB_URI || 'mongodb://localhost:27017/';
+MongoClient.connect(db_url, { useUnifiedTopology: true }, function(err, database) {
     if (err) {
         return console.log(err);
     }
-    dbTree = database.db('tree');
-    console.log('CONNECTED');
+    dbTree = database.db('heroku_whcx8gwx');
+    console.log(`CONNECTED TO ${dbTree}`);
     app.listen(PORT, () => { console.log(`Server listening on port ${PORT}`); });
 });
 
-app.get('/comp/:id', async function(req, res) {
+app.get('/comp', async function(req, res) {
     dbTree.collection('comp').find({}).toArray(function(err, components) {
         if (err) {
             console.log(err);

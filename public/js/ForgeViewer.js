@@ -94,12 +94,9 @@ function onDocumentLoadSuccess(doc) {
     var viewables = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, viewables).then(i => {
         viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-        // documented loaded, any action?
         // viewer.loadExtension('Autodesk.ModelStructure');
         // let ext = viewer.getExtension('Autodesk.ModelStructure');
         // ext.activate();
-        // console.log(ext);
-        // console.log(ext.isActive());
         viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, function() {
             components = buildModelTree(viewer.model);
             comp_data = components;
