@@ -21,13 +21,13 @@ app.use((err, req, res, next) => {
     res.status(err.statusCode).json(err);
 });
 
-var db_url = process.env.MONGODB_URI || 'mongodb://localhost:27017/';
+var db_url = process.env.MONGODB_URI;
 MongoClient.connect(db_url, { useUnifiedTopology: true }, function(err, database) {
     if (err) {
         return console.log(err);
     }
     dbTree = database.db('heroku_whcx8gwx');
-    console.log(`CONNECTED TO ${dbTree}`);
+    console.log(`CONNECTED TO ${dbTree.databaseName}`);
     app.listen(PORT, () => { console.log(`Server listening on port ${PORT}`); });
 });
 
