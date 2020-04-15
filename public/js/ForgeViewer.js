@@ -100,11 +100,21 @@ function onDocumentLoadSuccess(doc) {
         viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, function() {
             components = buildModelTree(viewer.model);
             comp_data = components;
-            let chi = get_children(comp_data.children);
+            let chi;
+            $.ajax({
+                url: '/comp_names',
+                type: 'GET',
+                success: function(res) {
+                    chi = res;
+                    console.log(res);
+                    $('#compTree').jstree(true).settings.core.data[1] = get_new_data(chi);
+                    $('#compTree').jstree(true).refresh();
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
             var isolated;
-            $('#compTree').jstree(true).settings.core.data[1] = get_new_data(chi);
-            $('#compTree').jstree(true).refresh();
-            // console.log(JSON.stringify(array));
             $("#compTree").on("open_node.jstree", function(e, data) {
                 if (data.node.id === 'components') {
                     var row = $(".row").children();
