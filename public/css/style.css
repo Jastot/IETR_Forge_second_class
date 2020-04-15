@@ -39,6 +39,10 @@ p {
     top: 10px;
 }
 
+.logo a img {
+    outline: none;
+}
+
 .navbar .title {
     text-align: center;
     line-height: 51px;

@@ -75,18 +75,20 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                     }
                 }
             })
-            document.querySelector('#forgeViewer').addEventListener('mouseover', e => {
+
+            $('#forgeViewer').on('mouseover', e => {
                 if (e.target.className == 'annotationIndex' || e.target.id == 'annotationText') {
                     let div = e.target.parentNode;
                     let closebtn = div.lastChild;
                     closebtn.style.opacity = 1;
                     console.log(div.id);
-                    document.querySelector(`#${div.id}`).addEventListener('mouseleave', () => {
+                    $(`#${div.id}`).on('mouseleave', () => {
                         closebtn.style.opacity = 0;
                     });
                 }
             });
-            document.querySelector('#forgeViewer').addEventListener('click', e => {
+
+            $('#forgeViewer').on('click', e => {
                 if (e.target.className == 'annotation-btn-close _wt' || e.target.className == 'annotation-btn-close') {
                     if (e.target.style.opacity == 1) {
                         let div = e.target.parentNode;

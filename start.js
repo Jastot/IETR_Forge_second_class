@@ -22,7 +22,6 @@ app.use((err, req, res, next) => {
 });
 
 var db_url = process.env.MONGODB_URI;
-console.log(db_url);
 MongoClient.connect(db_url, { useUnifiedTopology: true }, function(err, database) {
     if (err) {
         return console.log(err);
