@@ -151,9 +151,6 @@ function onDocumentLoadSuccess(doc) {
                         viewer.isolate(Number(dbid));
                         viewer.fitToView(Number(dbid));
                         isolated = dbid;
-                    } else {
-                        isolated = 0;
-                        viewer.isolate(Number(isolated));
                     }
                 }
             });
