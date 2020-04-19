@@ -7,45 +7,52 @@ if (config.credentials.client_id == null || config.credentials.client_secret == 
     console.error('Missing FORGE_CLIENT_ID or FORGE_CLIENT_SECRET env. variables.');
     return;
 }
+var bodyParser = require('body-parser');
+
 
 let app = express();
 var MongoClient = require("mongodb").MongoClient;
-var dbTree;
+var db;
 app.use(express.static(path.join(__dirname, 'public')));
 app.use(express.json({ limit: '50mb' }));
 app.use('/api/forge/oauth', require('./routes/oauth'));
 app.use('/api/forge/oss', require('./routes/oss'));
 app.use('/api/forge/modelderivative', require('./routes/modelderivative'));
+app.use(bodyParser.json({ type: 'application/*+json' }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use((err, req, res, next) => {
     console.error(err);
     res.status(err.statusCode).json(err);
 });
 
 var db_url = process.env.MONGODB_URI;
-console.log(db_url);
 MongoClient.connect(db_url, { useUnifiedTopology: true }, function(err, database) {
     if (err) {
         return console.log(err);
     }
-    dbTree = database.db('heroku_whcx8gwx');
-    console.log(`CONNECTED TO ${dbTree.databaseName}`);
+    db = database.db('heroku_whcx8gwx');
+    console.log(`CONNECTED TO ${db.databaseName}`);
     app.listen(PORT, () => { console.log(`Server listening on port ${PORT}`); });
 });
 
-app.get('/comp', async function(req, res) {
-    dbTree.collection('comp').find({}).toArray(function(err, components) {
-        if (err) {
-            console.log(err);
-        }
-        res.send(components);
-    });
-});
-
-app.get('/texts/:id', async function(req, res) {
-    dbTree.collection('texts').find({ dbid: Number(req.params.id) }).toArray(function(err, components) {
+app.get('/texts/:id', function(req, res) {
+    db.collection('texts').find({ dbid: Number(req.params.id) }).toArray(function(err, components) {
         if (err) {
             console.log(err);
         }
         res.send(components[0]);
+    });
+});
+
+app.post('/comp_names', function(req) {
+    console.log(typeof req.body.chi);
+});
+
+app.get('/comp_names', function(req, res) {
+    db.collection('comp_names').find({}, { projection: { _id: 0 } }).toArray(function(err, components) {
+        if (err) {
+            console.log(err);
+        }
+        res.send(components);
     });
 });

@@ -39,6 +39,10 @@ p {
     top: 10px;
 }
 
+.logo a img {
+    outline: none;
+}
+
 .navbar .title {
     text-align: center;
     line-height: 51px;
@@ -111,7 +115,7 @@ p {
     font-family: 'Titillium Web', sans-serif;
     color: #333333;
     text-align: justify;
-    transition: right 1s;
+    transition: right 0.8s;
 }
 
 .textboard .textInfo {

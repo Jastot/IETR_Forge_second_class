@@ -10,9 +10,9 @@ router.get('/token', async (req, res, next) => {
         const token = await getPublicToken();
         res.json({
             access_token: token.access_token,
-            expires_in: token.expires_in    
+            expires_in: token.expires_in
         });
-    } catch(err) {
+    } catch (err) {
         next(err);
     }
 });
