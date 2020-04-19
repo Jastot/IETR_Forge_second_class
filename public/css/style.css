@@ -108,7 +108,7 @@ p {
 }
 
 .textboard {
-    position: fixed;
+    position: absolute;
     top: 101px;
     right: -100%;
     padding: 0 15px;
@@ -152,10 +152,22 @@ p {
     color: rgb(29, 122, 199);
     cursor: pointer;
     font-weight: bold;
+    text-decoration: none;
+    display: inline-block;
+    line-height: 1;
 }
 
-.textboard .link:hover {
-    color: rgb(64, 155, 230);
+.textboard .link:after {
+    background-color: rgb(29, 122, 199);
+    display: block;
+    content: "";
+    height: 2px;
+    width: 0%;
+    transition: width 0.3s ease-in-out;
+}
+
+.textboard .link:hover:after {
+    width: 100%;
 }
 
 .MarkupIcon {

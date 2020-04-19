@@ -2,6 +2,7 @@ $(document).ready(function() {
     prepareTree();
 });
 
+
 function prepareTree() {
     $('#compTree').jstree({
         'core': {
