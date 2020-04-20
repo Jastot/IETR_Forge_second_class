@@ -114,7 +114,7 @@ p {
     padding: 0 15px;
     font-family: 'Titillium Web', sans-serif;
     color: #333333;
-    text-align: justify;
+    text-align: left;
     transition: right 0.8s;
 }
 
@@ -139,7 +139,6 @@ p {
     font-size: 24px;
     font-weight: 700;
     line-height: 1.5;
-    text-align: center;
 }
 
 .textboard .maintext {
@@ -168,6 +167,20 @@ p {
 
 .textboard .link:hover:after {
     width: 100%;
+}
+
+.textboard .extra-img {
+    justify-content: center;
+    align-items: center;
+    padding: 5px 10px;
+    border: 2px solid rgba(29, 122, 199, 0.801);
+    border-radius: 15px;
+    margin-top: 5px;
+}
+
+.extra-img a.fancybox img {
+    width: 100%;
+    height: 100%;
 }
 
 .MarkupIcon {
