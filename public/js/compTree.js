@@ -146,12 +146,12 @@ function adjustLayout(name, text) {
         $('#textboard').removeClass('slide-pos');
         setTimeout(() => {
             $('#textboard').addClass('slide-pos');
-            $('#textInfo').html(`<p class="headtext">${name}</p><p class="maintext">&nbsp;&nbsp;&nbsp;&nbsp;${text}</p>`);
+            $('#textInfo').html(`<p class="headtext">${name}</p><p class="maintext">${text}</p>`);
         }, 400);
     } else {
         $('#textboard').html('<div class="panel panel-default"><div class="textInfo" id="textInfo"></div></div>');
         $('#textboard').addClass('slide-pos');
-        $('#textInfo').html(`<p class="headtext">${name}</p><p class="maintext">&nbsp;&nbsp;&nbsp;&nbsp;${text}</p>`);
+        $('#textInfo').html(`<p class="headtext">${name}</p><p class="maintext">${text}</p>`);
     }
 
 

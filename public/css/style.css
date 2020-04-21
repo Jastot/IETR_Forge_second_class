@@ -145,6 +145,7 @@ p {
     line-height: 1.5;
     font-size: 18px;
     margin-top: 10px;
+    text-indent: 20px;
 }
 
 .textboard .link {
@@ -163,6 +164,10 @@ p {
     height: 2px;
     width: 0%;
     transition: width 0.3s ease-in-out;
+}
+
+.textboard .maintext .link {
+    text-indent: 0;
 }
 
 .textboard .link:hover:after {
