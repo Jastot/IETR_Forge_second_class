@@ -1,12 +1,12 @@
 var viewer;
-$(document).ready(function() {
+$(document).ready(function () {
     $("#forgeViewer").empty();
     var urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZS5zdHA=';
-    getForgeToken(function(access_token) {
+    getForgeToken(function (access_token) {
         jQuery.ajax({
             url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn + '/manifest',
             headers: { 'Authorization': 'Bearer ' + access_token },
-            success: function(res) {
+            success: function (res) {
                 if (res.status === 'success') launchViewer(urn);
                 else $("#forgeViewer").html('Преобразование всё ещё выполняется').css('color', 'lightblue');
             }
@@ -23,7 +23,7 @@ function launchViewer(urn) {
     Autodesk.Viewing.Initializer(options, () => {
         viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
             extensions: ['HandleSelectionExtension', 'Markup3dExtension']
-                //disabledExtensions: { explode: true, bimwalk: true, settings: true, propertiesmanager: true, modelstructure: true }
+            //disabledExtensions: { explode: true, bimwalk: true, settings: true, propertiesmanager: true, modelstructure: true }
         });
         viewer.start();
         viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
@@ -97,25 +97,9 @@ function onDocumentLoadSuccess(doc) {
         // viewer.loadExtension('Autodesk.ModelStructure');
         // let ext = viewer.getExtension('Autodesk.ModelStructure');
         // ext.activate();
-        viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, function() {
-            components = buildModelTree(viewer.model);
-            comp_data = components;
-            let chi;
-            $.ajax({
-                url: '/comp_names',
-                type: 'GET',
-                success: function(res) {
-                    chi = res;
-                    console.log(res);
-                    $('#compTree').jstree(true).settings.core.data[1] = get_new_data(chi);
-                    $('#compTree').jstree(true).refresh();
-                },
-                error: function(err) {
-                    console.log(err);
-                }
-            });
+        viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, function () {
             var isolated;
-            $("#compTree").on("open_node.jstree", function(e, data) {
+            $("#compTree").on("open_node.jstree", function (e, data) {
                 if (data.node.id === 'components') {
                     var row = $(".row").children();
                     $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
@@ -123,7 +107,7 @@ function onDocumentLoadSuccess(doc) {
                     viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
                 }
             });
-            $("#compTree").on("close_node.jstree", function(e, data) {
+            $("#compTree").on("close_node.jstree", function (e, data) {
                 if (data.node.id === 'components') {
                     var row = $(".row").children();
                     $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
@@ -131,21 +115,21 @@ function onDocumentLoadSuccess(doc) {
                     viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
                 }
             });
-            $('#compTree').on("activate_node.jstree", function(evt, data) {
+            $('#compTree').on("activate_node.jstree", function (evt, data) {
                 if (data != null && data.node != null && data.node.type == 'object') {
                     let dbid = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
                     if (isolated != dbid) {
                         $.ajax({
                             url: '/texts/' + dbid,
                             type: 'GET',
-                            success: function(res) {
+                            success: function (res) {
                                 let name = res.name;
                                 let text = res.text;
                                 console.log(name);
                                 console.log(text);
                                 adjustLayout(name, text);
                             },
-                            error: function(err) {
+                            error: function (err) {
                                 console.log(err);
                             }
                         });
@@ -155,13 +139,9 @@ function onDocumentLoadSuccess(doc) {
                     }
                 }
             });
+        });
 
-
-
-
-        })
-
-        viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, function() {
+        viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, function () {
             $("#cube-loader").addClass("loaded_hiding");
             setTimeout(() => {
                 $("#cube-loader").css("display", "none");
@@ -180,7 +160,7 @@ function getAlldbIds(rootId) {
     while (queue.length > 0) {
         var node = queue.shift();
         alldbId.push(node);
-        instanceTree.enumNodeChildren(node, function(childrenIds) {
+        instanceTree.enumNodeChildren(node, function (childrenIds) {
             queue.push(childrenIds);
         });
     }

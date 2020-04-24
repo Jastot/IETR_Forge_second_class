@@ -1,5 +1,18 @@
-$(document).ready(function() {
+$(document).ready(function () {
     prepareTree();
+    $.ajax({
+        url: '/tree',
+        type: 'GET',
+        success: function (res) {
+            for (item in res) {
+                $('#compTree').jstree(true).settings.core.data[item] = res[item];
+            }
+            $('#compTree').jstree(true).refresh();
+        },
+        error: function (err) {
+            console.log(err);
+        }
+    });
 });
 
 
@@ -9,35 +22,7 @@ function prepareTree() {
             'multiple': false,
             'check_callback': true,
             'themes': { "icons": true },
-            'data': [{
-                    text: 'Общие сведения',
-                    type: 'info',
-                    state: {
-                        selected: true
-                    },
-                    id: 'info'
-                }, {
-                    text: 'Компоненты',
-                    type: 'components',
-                    id: 'components'
-                },
-                {
-                    text: 'Принцип работы',
-                    type: 'work',
-                    id: 'work'
-                }, {
-                    text: 'Обслуживание',
-                    type: 'service',
-                    children: [{
-                        text: 123,
-                        type: 'child'
-                    }, {
-                        text: 321,
-                        type: 'child'
-                    }],
-                    id: 'service'
-                }
-            ]
+            'data': []
         },
         "types": {
             "default": {
@@ -71,7 +56,7 @@ function buildModelTree(model, createNodeFunc = null) {
     //builds model tree recursively
     function _buildModelTreeRec(node) {
         instanceTree.enumNodeChildren(node.dbId,
-            function(childId) {
+            function (childId) {
                 var childNode = null;
                 if (createNodeFunc) {
                     childNode = createNodeFunc(childId);
