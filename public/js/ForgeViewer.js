@@ -155,7 +155,18 @@ function onDocumentLoadSuccess(doc) {
                     }
                 }
             });
+
+
+
+
         })
+
+        viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, function() {
+            $("#cube-loader").addClass("loaded_hiding");
+            setTimeout(() => {
+                $("#cube-loader").css("display", "none");
+            }, 500);
+        });
     })
 }
 
