@@ -175,6 +175,11 @@ p {
     width: 100%;
 }
 
+.textboard .list {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
 .textboard .extra-img {
     justify-content: center;
     align-items: center;
