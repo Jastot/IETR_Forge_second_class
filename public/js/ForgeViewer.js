@@ -134,9 +134,9 @@ function onDocumentLoadSuccess(doc) {
                             }
                         });
                         viewer.isolate(Number(dbid));
-                        viewer.fitToView(Number(dbid));
                         isolated = dbid;
                     }
+                    viewer.fitToView(Number(dbid));
                 }
             });
         });
