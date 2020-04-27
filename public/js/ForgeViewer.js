@@ -23,7 +23,7 @@ function launchViewer(urn) {
 
     Autodesk.Viewing.Initializer(options, () => {
         viewer = new Autodesk.Viewing.GuiViewer3D(document.getElementById('forgeViewer'), {
-            extensions: ['HandleSelectionExtension', 'Markup3dExtension']
+            extensions: ['HandleSelectionExtension', 'Markup3dExtension', 'Autodesk.Fusion360.Animation']
             //disabledExtensions: { explode: true, bimwalk: true, settings: true, propertiesmanager: true, modelstructure: true }
         });
         viewer.start();
@@ -102,19 +102,6 @@ var comp_data;
 //         onToolbarCreated)
 // }
 function onDocumentLoadSuccess(doc) {
-    var animationItems = [];
-    if (animationItems.length == 0) {
-        animationItems = doc.getRoot().search({
-            'type': 'folder',
-            'role': 'animation'
-        }, true);
-    }
-    if (animationItems.length > 0) {
-        viewer.loadModel(doc.getViewablePath(animationItems[0].children[0]));
-    }
-
-
-
     var viewables = doc.getRoot().getDefaultGeometry();
     viewer.loadDocumentNode(doc, viewables).then(i => {
         viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
@@ -165,27 +152,46 @@ function onDocumentLoadSuccess(doc) {
             });
         });
 
-        viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, function () {
-            var scene = viewer.impl.modelQueue();
-            var model = scene.findModel(1);
-            console.log(model);
-            // remove model from viewer - but without discarding materials
-            viewer.impl.removeModel(model);
+        viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (e) => {
+            viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+            console.log(e);
+            if (e.model.id === 1) {
+                var animationItems = [];
+                if (animationItems.length == 0) {
+                    animationItems = doc.getRoot().search({
+                        'type': 'folder',
+                        'role': 'animation'
+                    }, true);
+                }
+                if (animationItems.length > 0) {
+                    viewer.loadModel(doc.getViewablePath(animationItems[0].children[0]), () => {
+                        viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+                    });
 
-            // make this model available for later showModel() calls
-            scene.addHiddenModel(model);
-            console.log(viewer);
-            viewer.loadExtension('Autodesk.Fusion360.Animation');
-            setTimeout(() => {
-                var aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
-                console.log(aExt);
-                aExt.load();
-            }, 3000);
+                }
+                var scene = viewer.impl.modelQueue();
+                var model = scene.findModel(1);
+                // remove model from viewer - but without discarding materials
+                viewer.impl.removeModel(model);
 
-            $("#cube-loader").addClass("loaded_hiding");
-            setTimeout(() => {
-                $("#cube-loader").css("display", "none");
-            }, 500);
+                // make this model available for later showModel() calls
+                scene.addHiddenModel(model);
+
+                viewer.loadExtension('Autodesk.Fusion360.Animation');
+
+                if (animationItems.length > 0) {
+                    var aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
+                    if (aExt) {
+                        console.log(aExt);
+                        aExt.load();
+                    }
+                }
+            } else {
+                $("#cube-loader").addClass("loaded_hiding");
+                setTimeout(() => {
+                    $("#cube-loader").css("display", "none");
+                }, 500);
+            }
         });
     })
 }
