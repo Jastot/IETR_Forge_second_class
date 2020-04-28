@@ -154,7 +154,6 @@ function onDocumentLoadSuccess(doc) {
 
         viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (e) => {
             viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-            console.log(e);
             if (e.model.id === 1) {
                 var animationItems = [];
                 if (animationItems.length == 0) {
@@ -172,19 +171,21 @@ function onDocumentLoadSuccess(doc) {
                 var scene = viewer.impl.modelQueue();
                 var model = scene.findModel(1);
                 // remove model from viewer - but without discarding materials
-                viewer.impl.removeModel(model);
-
+                // viewer.impl.removeModel(model);
                 // make this model available for later showModel() calls
-                scene.addHiddenModel(model);
-
+                // scene.addHiddenModel(model);
+                // or viewer.hideModel(model.id) + viewer.showModel(model.id)
+                viewer.hideModel(model.id);
+                // setTimeout(() => {
+                //     viewer.showModel(model.id);
+                //     viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+                // }, 1500);
                 viewer.loadExtension('Autodesk.Fusion360.Animation');
 
                 if (animationItems.length > 0) {
                     var aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
-                    if (aExt) {
-                        console.log(aExt);
+                    if (aExt)
                         aExt.load();
-                    }
                 }
             } else {
                 $("#cube-loader").addClass("loaded_hiding");

@@ -333,29 +333,29 @@ p {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-/* .adsk-viewing-viewer #toolbar-modelStructureTool {
-    display: none!important
+.adsk-viewing-viewer #toolbar-modelStructureTool {
+    display: none!important;
 }
 
 .adsk-viewing-viewer #toolbar-explodeTool {
-    display: none!important
+    display: none!important;
 }
 
 .adsk-viewing-viewer #toolbar-propertiesTool {
-    display: none!important
+    display: none!important;
 }
 
 .adsk-viewing-viewer #toolbar-fullscreenTool {
-    display: none!important
+    display: none!important;
 }
 
 .adsk-viewing-viewer #toolbar-settingsTool {
-    display: none!important
+    display: none!important;
 }
 
 .adsk-viewing-viewer #toolbar-bimWalkTool {
-    display: none!important
-} */
+    display: none!important;
+}
 
 #cube-loader {
     align-items: center;
@@ -446,4 +446,12 @@ p {
         transform: perspective(136px) rotateY(180deg);
         opacity: 0;
     }
+}
+
+#toolbar-animation-timeline{
+    max-width: calc(100% - 305px);
+}
+
+.animation-timeline{
+    max-width: 100%;
 }
