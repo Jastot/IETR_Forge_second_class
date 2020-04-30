@@ -1,18 +1,18 @@
-$(document).ready(function() {
+$(document).ready(function () {
     prepareAppBucketTree();
-    $('#refreshBuckets').click(function() {
+    $('#refreshBuckets').click(function () {
         $('#appBuckets').jstree(true).refresh();
     });
 
-    $('#createNewBucket').click(function() {
+    $('#createNewBucket').click(function () {
         createNewBucket();
     });
 
-    $('#createBucketModal').on('shown.bs.modal', function() {
+    $('#createBucketModal').on('shown.bs.modal', function () {
         $("#newBucketKey").focus();
     })
 
-    $('#hiddenUploadField').change(function() {
+    $('#hiddenUploadField').change(function () {
         var node = $('#appBuckets').jstree(true).get_selected(true)[0];
         var _this = this;
         if (_this.files.length == 0) return;
@@ -29,7 +29,7 @@ $(document).ready(function() {
                     processData: false,
                     contentType: false,
                     type: 'POST',
-                    success: function(data) {
+                    success: function (data) {
                         $('#appBuckets').jstree(true).refresh_node(node);
                         $('#appBuckets').jstree(true).open_node(node);
                         _this.value = '';
@@ -44,13 +44,13 @@ function createNewBucket() {
     var bucketKey = $('#newBucketKey').val();
     jQuery.post({
         url: '/api/forge/oss/buckets',
-        contentType: 'application/json',
+        contentType: 'application/  ',
         data: JSON.stringify({ 'bucketKey': bucketKey }),
-        success: function(res) {
+        success: function (res) {
             $('#appBuckets').jstree(true).refresh();
             $('#createBucketModal').modal('toggle');
         },
-        error: function(err) {
+        error: function (err) {
             if (err.status == 409)
                 alert('Контейнер уже существует - 409: Повторение')
             console.log(err);
@@ -68,7 +68,7 @@ function prepareAppBucketTree() {
                 "url": '/api/forge/oss/buckets',
                 "dataType": "json",
                 'multiple': false,
-                "data": function(node) {
+                "data": function (node) {
                     return { "id": node.id };
                 }
             }
@@ -89,21 +89,21 @@ function prepareAppBucketTree() {
         },
         "plugins": ["types", "state", "sort", "contextmenu"],
         contextmenu: { items: autodeskCustomMenu }
-    }).on('loaded.jstree', function() {
+    }).on('loaded.jstree', function () {
         $('#appBuckets').jstree('open_all');
-    }).bind("activate_node.jstree", function(evt, data) {
+    }).bind("activate_node.jstree", function (evt, data) {
         if (data != null && data.node != null && data.node.type == 'object') {
             $("#forgeViewer").empty();
             var urn = data.node.id;
-            getForgeToken(function(access_token) {
+            getForgeToken(function (access_token) {
                 jQuery.ajax({
                     url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn + '/manifest',
                     headers: { 'Authorization': 'Bearer ' + access_token },
-                    success: function(res) {
+                    success: function (res) {
                         if (res.status === 'success') launchViewer(urn);
                         else $("#forgeViewer").html('Преобразование всё ещё выполняется').css('color', 'white');
                     },
-                    error: function(err) {
+                    error: function (err) {
                         var msgButton = 'Этот файл еще не преобразован! ' +
                             '<button class="btn btn-xs btn-info" id="translateObject" onclick="translateObject()"><span class="glyphicon glyphicon-eye-open"></span> ' +
                             'Начать преобразование</button>'
@@ -122,14 +122,14 @@ function autodeskCustomMenu(autodeskNode) {
             items = {
                 uploadFile: {
                     label: "Загрузить файл",
-                    action: function() {
+                    action: function () {
                         uploadFile();
                     },
                     icon: 'glyphicon glyphicon-cloud-upload'
                 },
                 deleteBucket: {
                     label: "Удалить контейнер",
-                    action: function() {
+                    action: function () {
                         deleteBucket(autodeskNode);
                     },
                     icon: 'glyphicon glyphicon-trash'
@@ -140,7 +140,7 @@ function autodeskCustomMenu(autodeskNode) {
             items = {
                 translateFile: {
                     label: "Преобразовать",
-                    action: function() {
+                    action: function () {
                         var treeNode = $('#appBuckets').jstree(true).get_selected(true)[0];
                         translateObject(treeNode);
                     },
@@ -148,7 +148,7 @@ function autodeskCustomMenu(autodeskNode) {
                 },
                 deleteFile: {
                     label: "Удалить объект",
-                    action: function() {
+                    action: function () {
                         deleteObject(autodeskNode);
                     },
                     icon: 'glyphicon glyphicon-trash'
@@ -169,10 +169,10 @@ function deleteBucket(node) {
     $.ajax({
         url: '/api/forge/oss/buckets/' + encodeURIComponent(bucketKey),
         type: 'DELETE',
-        success: function() {
+        success: function () {
             $('#appBuckets').jstree(true).refresh();
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
         }
     });
@@ -185,10 +185,10 @@ function deleteObject(node) {
     $.ajax({
         url: '/api/forge/oss/buckets/' + encodeURIComponent(bucketKey) + "/objects/" + encodeURIComponent(objectName),
         type: 'DELETE',
-        success: function() {
+        success: function () {
             $('#appBuckets').jstree(true).refresh();
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
         }
     });
@@ -203,7 +203,7 @@ function translateObject(node) {
         url: '/api/forge/modelderivative/jobs',
         contentType: 'application/json',
         data: JSON.stringify({ 'bucketKey': bucketKey, 'objectName': objectKey }),
-        success: function(res) {
+        success: function (res) {
             $("#forgeViewer").html('Преобразование началось! Откройте объект через некоторое время!');
         },
     });
