@@ -116,6 +116,10 @@ function onDocumentLoadSuccess(doc) {
                     $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
                     $(row[1]).removeClass('col-sm-7 col-md-7').addClass('col-sm-6 col-md-6');
                     viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+                    // viewer.addEventListener(Autodesk.Viewing.VIEWER_RESIZE_EVENT, () => {
+                    //     console.log(5);
+                    //     viewer.resize();
+                    // });
                 }
             });
             $("#compTree").on("close_node.jstree", function (e, data) {
