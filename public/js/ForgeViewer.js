@@ -160,7 +160,7 @@ function onDocumentLoadSuccess(doc) {
                             type: 'GET',
                             data: { 'id': data.node.id },
                             success: function (res) {
-                                getModel(res);
+                                getModel(Number(res));
                             },
                             error: function (err) {
                                 console.log(err);
@@ -205,22 +205,24 @@ function onDocumentLoadSuccess(doc) {
 }
 
 function getModel(id) {
-    console.log(id);
     let modelArray = [1, 2, 3, 4, 5];
     for (item of modelArray) {
         var scene = viewer.impl.modelQueue();
         var model = scene.findModel(item);
         console.log(model);
         if (item != id) {
-            viewer.impl.removeModel(model);
-            scene.addHiddenModel(model);
-            console.log(viewer.getHiddenModels());
+            if (model != null) {
+                viewer.impl.removeModel(model);
+                scene.addHiddenModel(model);
+                console.log(viewer.getHiddenModels());
+            }
         } else {
             let array = viewer.getHiddenModels();
             console.log(array);
             for (item of array) {
                 if (item) {
                     console.log(item.id);
+                    console.log(id);
                     if (item.id === id) {
                         // console.log(item.id);
                         console.log(5);
