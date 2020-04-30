@@ -333,6 +333,7 @@ p {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
+
 /* .adsk-viewing-viewer #toolbar-modelStructureTool {
     display: none!important;
 } */
@@ -357,7 +358,7 @@ p {
     display: none!important;
 }
 
-#cube-loader {
+*/ #cube-loader {
     align-items: center;
     display: flex;
     height: 100%;
@@ -448,10 +449,10 @@ p {
     }
 }
 
-#toolbar-animation-timeline{
+#toolbar-animation-timeline {
     max-width: calc(100% - 305px);
 }
 
-.animation-timeline{
+.animation-timeline {
     max-width: 100%;
 }
