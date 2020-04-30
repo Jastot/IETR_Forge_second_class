@@ -131,27 +131,42 @@ function onDocumentLoadSuccess(doc) {
                 }
             });
             $('#compTree').on("activate_node.jstree", function (evt, data) {
-                if (data != null && data.node != null && data.node.type == 'object') {
-                    let dbid = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
-                    if (isolated != dbid) {
+                if (data != null && data.node != null) {
+                    if (data.node.type == 'object') {
+                        let dbid = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
+                        if (isolated != dbid) {
+                            $.ajax({
+                                url: '/texts/' + dbid,
+                                type: 'GET',
+                                success: function (res) {
+                                    let name = res.name;
+                                    let text = res.text;
+                                    console.log(name);
+                                    console.log(text);
+                                    adjustLayout(name, text);
+                                },
+                                error: function (err) {
+                                    console.log(err);
+                                }
+                            });
+                            viewer.isolate(Number(dbid));
+                            isolated = dbid;
+                        }
+                        viewer.fitToView(Number(dbid));
+                    } else {
+                        console.log(data.node.id);
                         $.ajax({
-                            url: '/texts/' + dbid,
+                            url: '/modelId',
                             type: 'GET',
+                            data: { 'id': data.node.id },
                             success: function (res) {
-                                let name = res.name;
-                                let text = res.text;
-                                console.log(name);
-                                console.log(text);
-                                adjustLayout(name, text);
+                                getModel(res);
                             },
                             error: function (err) {
                                 console.log(err);
                             }
                         });
-                        viewer.isolate(Number(dbid));
-                        isolated = dbid;
                     }
-                    viewer.fitToView(Number(dbid));
                 }
             });
         });
@@ -172,18 +187,6 @@ function onDocumentLoadSuccess(doc) {
                     });
 
                 }
-                var scene = viewer.impl.modelQueue();
-                var model = scene.findModel(1);
-                // remove model from viewer - but without discarding materials
-                // viewer.impl.removeModel(model);
-                // make this model available for later showModel() calls
-                // scene.addHiddenModel(model);
-                // or viewer.hideModel(model.id) + viewer.showModel(model.id)
-                viewer.hideModel(model.id);
-                // setTimeout(() => {
-                //     viewer.showModel(model.id);
-                //     viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-                // }, 1500);
                 viewer.loadExtension('Autodesk.Fusion360.Animation');
 
                 if (animationItems.length > 0) {
@@ -199,6 +202,42 @@ function onDocumentLoadSuccess(doc) {
             }
         });
     })
+}
+
+function getModel(id) {
+    console.log(id);
+    let modelArray = [1, 2, 3, 4, 5];
+    for (item of modelArray) {
+        var scene = viewer.impl.modelQueue();
+        var model = scene.findModel(item);
+        console.log(model);
+        if (item != id) {
+            viewer.impl.removeModel(model);
+            scene.addHiddenModel(model);
+            console.log(viewer.getHiddenModels());
+        } else {
+            let array = viewer.getHiddenModels();
+            console.log(array);
+            for (item of array) {
+                if (item) {
+                    console.log(item.id);
+                    if (item.id === id) {
+                        // console.log(item.id);
+                        console.log(5);
+                        viewer.showModel(id);
+                    }
+                }
+            }
+        }
+    }
+    // var scene = viewer.impl.modelQueue();
+    // var model = scene.findModel(id);
+    // remove model from viewer - but without discarding materials
+    // viewer.impl.removeModel(model);
+    // make this model available for later showModel() calls
+    // scene.addHiddenModel(model);
+    // viewer.showModel(model.id)
+    // viewer.hideModel(model.id);
 }
 
 function getAlldbIds(rootId) {

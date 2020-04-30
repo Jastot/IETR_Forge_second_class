@@ -65,3 +65,12 @@ app.get('/tree', function (req, res) {
         res.send(tree);
     });
 });
+
+app.get('/modelId', function (req, res) {
+    db.collection('tree').find({ id: req.query.id }).toArray(function (err, obj) {
+        if (err) {
+            console.log(err);
+        }
+        res.send(obj[0].modelId);
+    })
+});

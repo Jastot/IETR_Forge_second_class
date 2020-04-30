@@ -333,9 +333,9 @@ p {
     background-color: rgba(0, 0, 0, 0.5);
 }
 
-.adsk-viewing-viewer #toolbar-modelStructureTool {
+/* .adsk-viewing-viewer #toolbar-modelStructureTool {
     display: none!important;
-}
+} */
 
 .adsk-viewing-viewer #toolbar-explodeTool {
     display: none!important;
