@@ -1,15 +1,16 @@
-$(document).ready(function () {
+$(document).ready(function() {
     prepareTree();
     $.ajax({
         url: '/tree',
         type: 'GET',
-        success: function (res) {
+        success: function(res) {
             for (item in res) {
                 $('#compTree').jstree(true).settings.core.data[item] = res[item];
             }
             $('#compTree').jstree(true).refresh();
+
         },
-        error: function (err) {
+        error: function(err) {
             console.log(err);
         }
     });
@@ -56,7 +57,7 @@ function buildModelTree(model, createNodeFunc = null) {
     //builds model tree recursively
     function _buildModelTreeRec(node) {
         instanceTree.enumNodeChildren(node.dbId,
-            function (childId) {
+            function(childId) {
                 var childNode = null;
                 if (createNodeFunc) {
                     childNode = createNodeFunc(childId);
@@ -126,7 +127,6 @@ function get_new_data(child_data) {
 // }
 
 function adjustLayout(name, text) {
-    console.log($('#textboard'));
     if ($('#textboard').children().length > 0) {
         $('#textboard').removeClass('slide-pos');
         setTimeout(() => {

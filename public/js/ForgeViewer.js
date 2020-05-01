@@ -31,235 +31,122 @@ function launchViewer(urn) {
         var documentId = 'urn:' + urn;
         Autodesk.Viewing.Document.load(documentId, onDocumentLoadSuccess, onDocumentLoadFailure);
 
-
-
-        // ani = viewer.getExtension();
-        // console.log(ani);
-        // ani.load();
-
-
-        // viewer.loadExtension('Autodesk.ModelStructure', viewer.config).then(ext => {
-        //     viewer.addEventListener(Autodesk.Viewing.TOOLBAR_CREATED_EVENT, onToolbarCreated);
-        // });
-        // viewer.addEventListener(Autodesk.Viewing.TOOLBAR_CREATED_EVENT, () => {
-        //     var anime = viewer.getExtension('Autodesk.Fusion360.Animation');
-        //     anime.load();
-        //     console.log(anime);
-        // });
-
-        // viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, () => {
-        //     console.log(viewer.loadedExtensions);
-        //     let arr = ["Autodesk.ModelStructure", "Autodesk.PropertiesManager", "Autodesk.BimWalk", "Autodesk.Explode"];
-        //     for (let i in arr) {
-        //         let Extension = viewer.getExtension(arr[i]);
-        //         Extension.unload();
-        //     }
-        //     console.log(viewer.loadedExtensions);
-        // });
-
-
-        // const onExtensionLoaded = (e) => {
-
-        //     if (e.extensionId === 'Autodesk.BimWalk') {
-
-        //         const navTools = viewer.toolbar.getControl('navTools')
-
-        //         navTools.removeControl('toolbar-bimWalkTool')
-
-        //         viewer.removeEventListener(
-        //             Autodesk.Viewing.EXTENSION_LOADED_EVENT,
-        //             onExtensionLoaded)
-        //     }
-        // }
-
-        // viewer.addEventListener(
-        //     Autodesk.Viewing.EXTENSION_LOADED_EVENT,
-        //     onExtensionLoaded)
-
-
-
     });
 }
-var components;
-var comp_data;
 
-// const onToolbarCreated = (e) => {
-//     console.log(e);
-//     let settingsTools = e.target.toolbar.getControl('settingsTools')
-//     settingsTools.removeControl('toolbar-modelStructureTool');
-//     // settingsTools.removeControl("toolbar-modelStructureTool");
-//     // settingsTools.removeControl('toolbar-propertiesTool');
-//     // settingsTools.removeControl('toolbar-settingsTool');
-//     // settingsTools.removeControl('toolbar-fullscreenTool');
-
-//     // let modelTools = viewer.toolbar.getControl('modelTools');
-//     // modelTools.removeControl('toolbar-explodeTool')
-//     //     // settingsTools.removeControl('toolbar-propertiesTool') 
-//     //     //toolbar-explodeTool  toolbar-propertiesTool toolbar-bimWalkTool
-
-//     viewer.removeEventListener(
-//         Autodesk.Viewing.TOOLBAR_CREATED_EVENT,
-//         onToolbarCreated)
-// }
 function onDocumentLoadSuccess(doc) {
     var viewables = doc.getRoot().getDefaultGeometry();
-    viewer.loadDocumentNode(doc, viewables).then(i => {
-        viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-        // viewer.loadExtension('Autodesk.ModelStructure');
-        // let ext = viewer.getExtension('Autodesk.ModelStructure');
-        // ext.activate();
-        viewer.addEventListener(Autodesk.Viewing.OBJECT_TREE_CREATED_EVENT, function() {
-            var isolated;
-            $("#compTree").on("open_node.jstree", function(e, data) {
-                if (data.node.id === 'components') {
-                    var row = $(".row").children();
-                    $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
-                    $(row[1]).removeClass('col-sm-7 col-md-7').addClass('col-sm-6 col-md-6');
-                    viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-                    // viewer.addEventListener(Autodesk.Viewing.VIEWER_RESIZE_EVENT, () => {
-                    //     console.log(5);
-                    //     viewer.resize();
-                    // });
-                }
+
+    viewer.loadDocumentNode(doc, viewables).then(() => {
+
+        var animationItems = [];
+        if (animationItems.length == 0) {
+            animationItems = doc.getRoot().search({
+                'type': 'folder',
+                'role': 'animation'
+            }, true);
+        }
+        if (animationItems.length > 0) {
+            viewer.loadModel(doc.getViewablePath(animationItems[0].children[0]), () => {
+                viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
             });
-            $("#compTree").on("close_node.jstree", function(e, data) {
-                if (data.node.id === 'components') {
-                    var row = $(".row").children();
-                    $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
-                    $(row[1]).removeClass('col-sm-6 col-md-6').addClass('col-sm-7 col-md-7');
-                    viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-                }
-            });
-            $('#compTree').on("activate_node.jstree", function(evt, data) {
-                if (data != null && data.node != null) {
-                    if (data.node.type == 'object') {
-                        let dbid = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
-                        if (isolated != dbid) {
-                            $.ajax({
-                                url: '/texts/' + dbid,
-                                type: 'GET',
-                                success: function(res) {
-                                    let name = res.name;
-                                    let text = res.text;
-                                    console.log(name);
-                                    console.log(text);
-                                    adjustLayout(name, text);
-                                },
-                                error: function(err) {
-                                    console.log(err);
-                                }
-                            });
-                            viewer.isolate(Number(dbid));
-                            isolated = dbid;
-                        }
-                        viewer.fitToView(Number(dbid));
-                    } else {
-                        console.log(data.node.id);
-                        $.ajax({
-                            url: '/modelId',
-                            type: 'GET',
-                            data: { 'id': data.node.id },
-                            success: function(res) {
-                                getModel(Number(res));
-                            },
-                            error: function(err) {
-                                console.log(err);
-                            }
-                        });
-                    }
-                }
-            });
-        });
+
+        }
 
         viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (e) => {
-            viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-            if (e.model.id === 1) {
-                var animationItems = [];
-                if (animationItems.length == 0) {
-                    animationItems = doc.getRoot().search({
-                        'type': 'folder',
-                        'role': 'animation'
-                    }, true);
-                }
-                if (animationItems.length > 0) {
-                    viewer.loadModel(doc.getViewablePath(animationItems[0].children[0]), () => {
-                        viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-                    });
-
-                } <<
-                <<
-                << < HEAD
-                var scene = viewer.impl.modelQueue();
-                var model = scene.findModel(1);
-                // remove model from viewer - but without discarding materials
-                // viewer.impl.removeModel(model);
-                // make this model available for later showModel() calls
-                // scene.addHiddenModel(model);
-                // or viewer.hideModel(model.id) + viewer.showModel(model.id)
-                viewer.hideModel(model.id);
-                // setTimeout(() => {
-                //     viewer.showModel(model.id);
-                //     viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-                // }, 1500);
-                ===
-                ===
-                = >>>
-                >>>
-                > master
-                viewer.loadExtension('Autodesk.Fusion360.Animation');
-
-                if (animationItems.length > 0) {
-                    var aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
-                    if (aExt)
-                        aExt.load();
-                }
-            } else {
+            if (e.model.id == animationItems[0].children.length + 1) {
+                viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
                 $("#cube-loader").addClass("loaded_hiding");
                 setTimeout(() => {
                     $("#cube-loader").css("display", "none");
                 }, 500);
             }
+
         });
     })
+    treeEvents();
+
+
 }
+
+function treeEvents() {
+    console.log("Петр");
+    var isolated;
+    $("#compTree").on("open_node.jstree", function(e, data) {
+        if (data.node.id === 'components') {
+            var row = $(".row").children();
+            $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
+            $(row[1]).removeClass('col-sm-7 col-md-7').addClass('col-sm-6 col-md-6');
+            viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+
+        }
+    });
+    $("#compTree").on("close_node.jstree", function(e, data) {
+        if (data.node.id === 'components') {
+            var row = $(".row").children();
+            $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
+            $(row[1]).removeClass('col-sm-6 col-md-6').addClass('col-sm-7 col-md-7');
+            viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+
+        }
+    });
+    $('#compTree').on("activate_node.jstree", function(evt, data) {
+        if (data != null && data.node != null) {
+            $.ajax({
+                url: '/model_id',
+                type: 'GET',
+                data: { 'type': data.node.type },
+                success: function(res) {
+                    getModel(Number(res));
+                },
+                error: function(err) {
+                    console.log(err);
+                }
+            });
+            let dbid = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
+            if (isolated != dbid) {
+                $.ajax({
+                    url: '/texts/' + dbid,
+                    type: 'GET',
+                    success: function(res) {
+                        let name = res.name;
+                        let text = res.text;
+                        adjustLayout(name, text);
+                    },
+                    error: function(err) {
+                        console.log(err);
+                    }
+                });
+                viewer.isolate(Number(dbid));
+                isolated = dbid;
+
+                viewer.fitToView(Number(dbid));
+
+
+            }
+        }
+    });
+};
+
+var loaded_id;
 
 function getModel(id) {
     let modelArray = [1, 2, 3, 4, 5];
     for (item of modelArray) {
         var scene = viewer.impl.modelQueue();
         var model = scene.findModel(item);
-        console.log(model);
         if (item != id) {
             if (model != null) {
                 viewer.impl.removeModel(model);
                 scene.addHiddenModel(model);
-                console.log(viewer.getHiddenModels());
             }
         } else {
-            let array = viewer.getHiddenModels();
-            console.log(array);
-            for (item of array) {
-                if (item) {
-                    console.log(item.id);
-                    console.log(id);
-                    if (item.id === id) {
-                        // console.log(item.id);
-                        console.log(5);
-                        viewer.showModel(id);
-                    }
-                }
-            }
+            viewer.showModel(id);
+            viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
         }
     }
-    // var scene = viewer.impl.modelQueue();
-    // var model = scene.findModel(id);
-    // remove model from viewer - but without discarding materials
-    // viewer.impl.removeModel(model);
-    // make this model available for later showModel() calls
-    // scene.addHiddenModel(model);
-    // viewer.showModel(model.id)
-    // viewer.hideModel(model.id);
 }
+
 
 function getAlldbIds(rootId) {
     var alldbId = [];

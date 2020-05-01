@@ -66,8 +66,8 @@ app.get('/tree', function(req, res) {
     });
 });
 
-app.get('/modelId', function(req, res) {
-    db.collection('tree').find({ id: req.query.id }).toArray(function(err, obj) {
+app.get('/model_id', function(req, res) {
+    db.collection('model_id').find({ type: req.query.type }).toArray(function(err, obj) {
         if (err) {
             console.log(err);
         }
