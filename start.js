@@ -26,7 +26,7 @@ app.use((err, req, res, next) => {
 });
 
 var db_url = process.env.MONGODB_URI;
-MongoClient.connect(db_url, { useUnifiedTopology: true }, function(err, database) {
+MongoClient.connect(db_url, { useUnifiedTopology: true }, function (err, database) {
     if (err) {
         return console.log(err);
     }
@@ -35,8 +35,8 @@ MongoClient.connect(db_url, { useUnifiedTopology: true }, function(err, database
     app.listen(PORT, () => { console.log(`Server listening on port ${PORT}`); });
 });
 
-app.get('/texts/:id', function(req, res) {
-    db.collection('texts').find({ dbid: Number(req.params.id) }).toArray(function(err, components) {
+app.get('/texts/:id', function (req, res) {
+    db.collection('texts').find({ dbid: Number(req.params.id) }).toArray(function (err, components) {
         if (err) {
             console.log(err);
         }
@@ -44,12 +44,12 @@ app.get('/texts/:id', function(req, res) {
     });
 });
 
-app.post('/comp_names', function(req) {
+app.post('/comp_names', function (req) {
     console.log(typeof req.body.chi);
 });
 
-app.get('/comp_names', function(req, res) {
-    db.collection('comp_names').find({}, { projection: { _id: 0 } }).toArray(function(err, components) {
+app.get('/comp_names', function (req, res) {
+    db.collection('comp_names').find({}, { projection: { _id: 0 } }).toArray(function (err, components) {
         if (err) {
             console.log(err);
         }
@@ -57,8 +57,8 @@ app.get('/comp_names', function(req, res) {
     });
 });
 
-app.get('/tree', function(req, res) {
-    db.collection('tree').find({}, { projection: { _id: 0, element_id: 0 } }).sort({ element_id: 1 }).toArray(function(err, tree) {
+app.get('/tree', function (req, res) {
+    db.collection('tree').find({}, { projection: { _id: 0, element_id: 0 } }).sort({ element_id: 1 }).toArray(function (err, tree) {
         if (err) {
             console.log(err);
         }
@@ -66,8 +66,8 @@ app.get('/tree', function(req, res) {
     });
 });
 
-app.get('/model_id', function(req, res) {
-    db.collection('model_id').find({ type: req.query.type }).toArray(function(err, obj) {
+app.get('/model_id', function (req, res) {
+    db.collection('model_id').find({ type: req.query.type }).toArray(function (err, obj) {
         if (err) {
             console.log(err);
         }
