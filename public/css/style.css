@@ -2,6 +2,11 @@
     box-sizing: border-box;
     outline: none;
 }
+button, 
+button:active, 
+button:focus {
+    outline: none!important;
+}
 
 .fill {
     height: calc(100vh - 111px);
