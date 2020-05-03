@@ -44,6 +44,15 @@ app.get('/texts/:id', function (req, res) {
     });
 });
 
+app.get('/tree/texts', function (req, res) {
+    db.collection('texts').find({ type: req.query.type }).toArray(function (err, components) {
+        if (err) {
+            console.log(err);
+        }
+        res.send(components[0]);
+    });
+});
+
 app.post('/comp_names', function (req) {
     console.log(typeof req.body.chi);
 });

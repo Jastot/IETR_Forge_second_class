@@ -105,12 +105,33 @@ function treeEvents() {
                     console.log(err);
                 }
             });
+            if (data.node.type === 'object') {
+                let dbid = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
+                if (isolated != dbid) {
+                    $.ajax({
+                        url: '/texts/' + dbid,
+                        type: 'GET',
+                        success: function (res) {
+                            let name = res.name;
+                            let text = res.text;
+                            adjustLayout(name, text);
+                        },
+                        error: function (err) {
+                            console.log(err);
+                        }
+                    });
+                    viewer.isolate(Number(dbid));
+                    isolated = dbid;
 
-            let dbid = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
-            if (isolated != dbid) {
+                    viewer.fitToView(Number(dbid));
+
+
+                }
+            } else {
                 $.ajax({
-                    url: '/texts/' + dbid,
+                    url: '/tree/texts',
                     type: 'GET',
+                    data: { 'type': data.node.type },
                     success: function (res) {
                         let name = res.name;
                         let text = res.text;
@@ -120,14 +141,7 @@ function treeEvents() {
                         console.log(err);
                     }
                 });
-                viewer.isolate(Number(dbid));
-                isolated = dbid;
-
-                viewer.fitToView(Number(dbid));
-
-
             }
-
         }
     });
 };
