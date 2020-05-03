@@ -319,6 +319,11 @@ p {
     z-index: 1;
 }
 
+.btn-animations {
+    margin-top: 10px;
+    margin-left: 5px;
+}
+
 ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
