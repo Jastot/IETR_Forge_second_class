@@ -324,6 +324,11 @@ p {
     margin-left: 5px;
 }
 
+.btn-lg {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
 ::-webkit-scrollbar {
     width: 4px;
     height: 4px;
