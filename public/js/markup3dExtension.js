@@ -167,36 +167,54 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 }
             }
         });
+        var screenpoints = [];
 
         function updateScreenPosition() {
-            for (item of annotationsArray) {
-                let screenpoint = viewer.impl.worldToClient(item.particle, cam);
-                let anid = '#annotation_' + (Number(item.index) + 1);
-                $(anid).css('top', screenpoint.y);
-                $(anid).css('left', screenpoint.x);
+            for (index in annotationsArray) {
+                screenpoints[index] = viewer.impl.worldToClient(annotationsArray[index].particle, cam);
+                let anid = '#annotation_' + (Number(annotationsArray[index].index) + 1);
+                $(anid).css('top', screenpoints[index].y);
+                $(anid).css('left', screenpoints[index].x);
             }
+            // for (item of annotationsArray) {
+            //     let screenpoint = viewer.impl.worldToClient(item.particle, cam);
+            //     let anid = '#annotation_' + (Number(item.index) + 1);
+            //     $(anid).css('top', screenpoint.y);
+            //     $(anid).css('left', screenpoint.x);
+            // }
         }
 
         function updateAnnotationOpacity() {
             let cam_pose = cam.position;
-            for (item of annotationsArray) {
-                let close_p = viewer.clientToWorld(item.sX, item.sY);
-                let dst1 = cam_pose.distanceTo(item.particle);
+            for (index in annotationsArray) {
+                let close_p = viewer.clientToWorld(screenpoints[index].x, screenpoints[index].y);
+                let dst1 = cam_pose.distanceTo(annotationsArray[index].particle);
                 let dst2 = cam_pose.distanceTo(close_p.point);
                 if (dst2 < 0.99 * dst1) {
-                    $(`#annotation_${Number(item.index) + 1}`).css("opacity", "0");
+                    $(`#annotation_${Number(annotationsArray[index].index) + 1}`).css("opacity", "0");
 
                 } else {
-                    $(`#annotation_${Number(item.index) + 1}`).css("opacity", "1");
+                    $(`#annotation_${Number(annotationsArray[index].index) + 1}`).css("opacity", "1");
                 }
-
             }
+            // for (item of annotationsArray) {
+            //     let close_p = viewer.clientToWorld(item.sX, item.sY);
+            //     let dst1 = cam_pose.distanceTo(item.particle);
+            //     let dst2 = cam_pose.distanceTo(close_p.point);
+            //     if (dst2 < 0.99 * dst1) {
+            //         $(`#annotation_${Number(item.index) + 1}`).css("opacity", "0");
+
+            //     } else {
+            //         $(`#annotation_${Number(item.index) + 1}`).css("opacity", "1");
+            //     }
+
+            // }
         }
 
         viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, () => {
             if (annotationsArray.length) {
                 updateScreenPosition();
-                // updateAnnotationOpacity();
+                updateAnnotationOpacity();
             }
         });
         this._button.setToolTip('Пометки');
