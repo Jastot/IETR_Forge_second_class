@@ -71,6 +71,7 @@ function onDocumentLoadSuccess(doc) {
 
 function treeEvents() {
     var isolated;
+    var lastNode;
 
     $("#compTree").on("open_node.jstree", function (e, data) {
         if (data.node.id === 'components') {
@@ -102,6 +103,7 @@ function treeEvents() {
                 }
             });
             if (data.node.type === 'object') {
+
                 let dbid = data.node.id.substring(data.node.id.lastIndexOf('_') + 1);
                 if (isolated != dbid) {
                     $.ajax({
@@ -121,9 +123,10 @@ function treeEvents() {
 
                     viewer.fitToView(Number(dbid));
 
-
                 }
-            } else {
+            } else if (lastNode != data.node.type) {
+                lastNode = data.node.type;
+
                 $.ajax({
                     url: '/tree/texts',
                     type: 'GET',
