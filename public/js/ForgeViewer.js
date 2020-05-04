@@ -54,11 +54,13 @@ function onDocumentLoadSuccess(doc) {
 
         viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (e) => {
             if (e.model.id == animationItems[0].children.length + 1) {
+                $("#compTree").jstree("select_node", 'info');
                 viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
                 $("#cube-loader").addClass("loaded_hiding");
+                $("#compTree").jstree("activate_node", 'info');
                 setTimeout(() => {
                     $("#cube-loader").css("display", "none");
-                    getModel(1);
+                    getModel(2);
                 }, 500);
             }
         });
@@ -74,12 +76,7 @@ function treeEvents() {
         if (data.node.id === 'components') {
             var row = $(".row").children();
             $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
-            $(row[1]).removeClass('col-sm-7 col-md-7').addClass('col-sm-6 col-md-6');
             viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-            // viewer.addEventListener(Autodesk.Viewing.VIEWER_RESIZE_EVENT, () => {
-            //     viewer.resize();
-            //     console.log('resized');
-            // });
         }
     });
 
@@ -87,7 +84,6 @@ function treeEvents() {
         if (data.node.id === 'components') {
             var row = $(".row").children();
             $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
-            $(row[1]).removeClass('col-sm-6 col-md-6').addClass('col-sm-7 col-md-7');
             viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
         }
     });
