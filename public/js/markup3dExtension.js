@@ -80,6 +80,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                                 data: { 'annotation': ann_obj },
                                 success: function() {
                                     getAnnotations();
+
                                 },
                                 error: function(err) {
                                     console.log(err);
@@ -89,6 +90,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                             //     getAnnotations()
                             // })
                             viewer.clearSelection();
+                            updateScreenPosition();
 
                         }
                     }
@@ -112,7 +114,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                     }
                 }).then((res) => {
                     annotationsArray = res;
-                    // console.log(annotationsArray);
+                    console.log(annotationsArray);
                     // console.log(index);
                     console.log(annotationsArray.length);
                     if (annotationsArray.length > 0) {
@@ -122,11 +124,12 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                         for (let item of annotationsArray) {
                             item.particle = new THREE.Vector3(item.x, item.y, item.z);
                             // console.log("JA");
-                            let div = $(`#annotation_${Number(item.index)}`)[0];
+                            let div = $(`#annotation_${item.index}`)[0];
                             // console.log(`${item.index + 1}`);
                             // console.log(div);
-                            if ($("#annotations").has($(`#annotation_${Number(item.index)}`))) {
-                                console.log(item.index)
+                            console.log(div);
+                            if (typeof div == 'undefined') {
+                                // console.log("Пивас");
                                 placeAnnotation(item.text, Number(item.index), item.sX, item.sY);
                             }
                         }
@@ -186,6 +189,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                             data: { "id": id },
                             success: function(res) {
                                 div.remove(div);
+                                getAnnotations();
                             },
                             error: function(err) {
                                 console.log(err);
