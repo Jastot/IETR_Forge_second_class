@@ -85,17 +85,33 @@ app.get('/model_id', function(req, res) {
 });
 
 app.post('/annotations', function(req, res) {
-    // console.log(req.body.annotation);
-    db.collection('annotations').insertOne(req.body.annotation);
+    db.collection('annotations').insertOne({
+        "index": Number(req.body.annotation.index),
+        "x": req.body.annotation.x,
+        "y": req.body.annotation.y,
+        "z": req.body.annotation.z,
+        "text": req.body.annotation.text,
+        "sX": req.body.annotation.sX,
+        "sY": req.body.annotation.sY
+    });
     res.status(200).send();
 });
 
 app.get('/annotations', function(req, res) {
-    db.collection('annotations').find().toArray(function(err, obj) {
+    db.collection('annotations').find().sort({ index: -1 }).toArray(function(err, obj) {
         if (err) {
             console.log(err);
         }
         res.send(obj);
-        console.log(obj);
+        // console.log(obj);
+    })
+});
+
+app.delete('/annotations', function(req, res) {
+    db.collection('annotations').deleteOne({ index: Number(req.body.id) }, function(err, obj) {
+        if (err) {
+            console.log(err);
+        }
+        res.status(200).send();
     })
 });
