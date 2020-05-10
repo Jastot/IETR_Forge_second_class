@@ -4,12 +4,13 @@ $(document).ready(function () {
     var urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZS5zdHA=';
     var urn2 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL1Rlc3QuZjNk';
     var urn3 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZTIyMi5mM2Q=';
+    var urn4 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZUxhc3QuZjNk';
     getForgeToken(function (access_token) {
         jQuery.ajax({
-            url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn3 + '/manifest',
+            url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn4 + '/manifest',
             headers: { 'Authorization': 'Bearer ' + access_token },
             success: function (res) {
-                if (res.status === 'success') launchViewer(urn3);
+                if (res.status === 'success') launchViewer(urn4);
                 else $("#forgeViewer").html('Преобразование всё ещё выполняется').css('color', 'lightblue');
             }
         });
@@ -36,19 +37,18 @@ function launchViewer(urn) {
 }
 
 function onDocumentLoadSuccess(doc) {
+    // console.log(get_new_data(chi));
     var viewables = doc.getRoot().getDefaultGeometry();
 
     viewer.loadDocumentNode(doc, viewables).then(() => {
 
         var animationItems = [];
         if (animationItems.length == 0) {
-            console.log(doc.getRoot());
             animationItems = doc.getRoot().search({
                 'type': 'folder',
                 'role': 'animation'
             }, true);
         }
-        console.log(animationItems);
         if (animationItems.length > 0) {
             viewer.loadModel(doc.getViewablePath(animationItems[0].children[0]), () => {
                 viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
@@ -56,7 +56,11 @@ function onDocumentLoadSuccess(doc) {
         }
 
         viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (e) => {
-            if (e.model.id == animationItems[0].children.length + 1) {
+            // console.log(viewer);
+            // let components = buildModelTree(viewer.model);
+            // let comp_data = components;
+            // let chi = get_children(comp_data.children);
+            if (animationItems[0].children.length == 2) {
                 $("#compTree").jstree("select_node", 'info');
                 $("#compTree").jstree("activate_node", 'info');
                 viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
@@ -74,11 +78,11 @@ function onDocumentLoadSuccess(doc) {
 }
 
 function treeEvents() {
-    var isolated;
-    var lastNode;
+    let isolated;
+    let lastNode;
 
     $("#compTree").on("open_node.jstree", function (e, data) {
-        if (data.node.id === 'components') {
+        if (data.node.id === 'components' || data.node.id === 'service') {
             var row = $(".row").children();
             $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
             viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
@@ -86,7 +90,7 @@ function treeEvents() {
     });
 
     $("#compTree").on("close_node.jstree", function (e, data) {
-        if (data.node.id === 'components') {
+        if (data.node.id === 'components' || data.node.id === 'service') {
             var row = $(".row").children();
             $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
             viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
@@ -154,13 +158,12 @@ var loadedId;
 
 function getModel(id) {
     let modelArray = [1, 2, 3, 4, 5];
-
+    let aExt;
     for (item of modelArray) {
         var scene = viewer.impl.modelQueue();
         var model = scene.findModel(item);
         if (item != id) {
             if (model != null) {
-                console.log('remove');
                 viewer.impl.removeModel(model);
                 scene.addHiddenModel(model);
             }
@@ -169,7 +172,11 @@ function getModel(id) {
                 loadedId = id;
                 viewer.showModel(id);
                 viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-                console.log('show');
+                if (id !== 1) {
+                    aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
+                    if (aExt.isActive)
+                        aExt.load();
+                }
             }
         }
     }

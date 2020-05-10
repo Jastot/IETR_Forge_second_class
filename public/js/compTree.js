@@ -51,7 +51,7 @@ function prepareTree() {
         "plugins": ["types"]
     })
 }
-// var array = [];
+var array = [];
 
 function buildModelTree(model, createNodeFunc = null) {
     //builds model tree recursively
@@ -93,38 +93,38 @@ function get_new_data(child_data) {
     }
 }
 
-// function get_children(arr) {
-//     let clone = [];
-//     for (const i in arr) {
-//         if (arr[i].children instanceof Array && arr[i].children.length > 1) {
-//             clone[i] = {
-//                 text: `${arr[i].name}`,
-//                 id: `comp_${arr[i].dbId}`,
-//                 children: get_children(arr[i].children),
-//                 type: 'object'
-//             };
-//             // array.push({
-//             //     dbid: arr[i].dbId,
-//             //     name: arr[i].name,
-//             //     // text: `<span>${arr[i].dbId} и ${arr[i].name}</span>`
-//             // })
-//             continue;
-//         }
-//         if (arr[i].name != "Solid1") {
-//             clone[i] = {
-//                 text: `${arr[i].name}`,
-//                 id: `comp_${arr[i].dbId}`,
-//                 type: 'object'
-//             };
-//             // array.push({
-//             //     dbid: arr[i].dbId,
-//             //     name: arr[i].name,
-//             //     // text: `<span>${arr[i].dbId} и ${arr[i].name}</span>`
-//             // })
-//         }
-//     }
-//     return clone;
-// }
+function get_children(arr) {
+    let clone = [];
+    for (let i in arr) {
+        if (arr[i].children instanceof Array && arr[i].children.length > 1) {
+            clone[i] = {
+                text: `${arr[i].name}`,
+                id: `comp_${arr[i].dbId}`,
+                children: get_children(arr[i].children),
+                type: 'object'
+            };
+            array.push({
+                dbid: arr[i].dbId,
+                name: arr[i].name,
+                // text: `<span>${arr[i].dbId} и ${arr[i].name}</span>`
+            })
+            continue;
+        }
+        if (arr[i].name != "Solid1") {
+            clone[i] = {
+                text: `${arr[i].name}`,
+                id: `comp_${arr[i].dbId}`,
+                type: 'object'
+            };
+            array.push({
+                dbid: arr[i].dbId,
+                name: arr[i].name,
+                // text: `<span>${arr[i].dbId} и ${arr[i].name}</span>`
+            })
+        }
+    }
+    return clone;
+}
 
 function adjustLayout(name, text) {
     if ($('#textboard').children().length > 0) {
