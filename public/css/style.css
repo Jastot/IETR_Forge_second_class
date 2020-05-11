@@ -472,3 +472,17 @@ p {
 .animation-timeline {
     max-width: 100%;
 }
+
+button{
+    margin-top: 5px;
+    margin-left: 15px;
+}
+
+.instruction{
+    display: block;
+    transition: background 0.8s;
+}
+.activeText{
+    border-radius: 5px;
+    background-color: rgba(121, 188, 224, 0.774);
+}
