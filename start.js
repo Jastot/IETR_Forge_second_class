@@ -45,11 +45,11 @@ app.get('/texts/:id', function(req, res) {
 });
 
 app.get('/tree/texts', function(req, res) {
-    db.collection('texts').find({ type: req.query.type }).toArray(function(err, components) {
+    db.collection('texts').find({ id: req.query.id }).toArray(function(err, textoid) {
         if (err) {
             console.log(err);
         }
-        res.send(components[0]);
+        res.send(textoid[0]);
     });
 });
 
