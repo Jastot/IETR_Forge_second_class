@@ -158,8 +158,15 @@ function adjustLayout(name, text) {
 
 var aExt;
 var checkCurTime;
+var array = [
+    {
+        'id': 5, 'time': [0, 5, 10]
+    },
+    { 'id': 6, 'time': [0, 5, 10] }
+];
 
 function animStart(id) {
+    console.log(array.find(x => x.id == '5'));
     $(`#${id}`).on('click', () => {
         aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
         if (!aExt.isPlaying()) {
@@ -167,7 +174,8 @@ function animStart(id) {
             aExt.play();
             checkCurTime = setInterval(() => {
                 changePlugInstruction();
-            }, 250);
+                changeInstruction(array.find(x => x.id == '5').id);
+            }, 10);
         } else {
             if (checkCurTime != 'undefined') {
                 clearInterval(checkCurTime);
@@ -177,8 +185,18 @@ function animStart(id) {
     });
 }
 
-function changePlugInstruction() {
+function changeInstruction(id) {
+    console.log(id);
+    switch (id) {
+        case 5:
+            console.log(5);
+        default:
+            return;
 
+    }
+}
+
+function changePlugInstruction() {
     let span = $('.maintext').children();
     if (aExt.getCurrentTime() > 0 && aExt.getCurrentTime() < 5) {
         $(span[0]).addClass('activeText');
