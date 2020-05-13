@@ -487,11 +487,6 @@ p {
     max-width: 100%;
 }
 
-button {
-    margin-top: 10px;
-    margin-left: 15px;
-}
-
 .instruction {
     transition: background 0.8s;
 }

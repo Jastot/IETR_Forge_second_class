@@ -1,16 +1,16 @@
-$(document).ready(function() {
+$(document).ready(function () {
     prepareTree();
     $.ajax({
         url: '/tree',
         type: 'GET',
-        success: function(res) {
+        success: function (res) {
             for (item in res) {
                 $('#compTree').jstree(true).settings.core.data[item] = res[item];
             }
             $('#compTree').jstree(true).refresh();
 
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
         }
     });
@@ -42,7 +42,7 @@ function prepareTree() {
                 "icon": "fas fa-tools"
             },
             "child_service": {
-                "icon": "fas fa-oil-can"
+                "icon": "fas fa-wrench"
             },
             "object": {
                 "icon": false
@@ -57,7 +57,7 @@ function buildModelTree(model, createNodeFunc = null) {
     //builds model tree recursively
     function _buildModelTreeRec(node) {
         instanceTree.enumNodeChildren(node.dbId,
-            function(childId) {
+            function (childId) {
                 var childNode = null;
                 if (createNodeFunc) {
                     childNode = createNodeFunc(childId);
@@ -156,14 +156,14 @@ let timePoints;
 let steps;
 let curTimePoint = 0;
 let instructions = [{
-        'id': 'anim_changePlug',
-        'time': [
-            [0, 5],
-            [5, 10],
-            [10, 12.63]
-        ]
-    },
-    { 'id': 'anim_info', 'time': [5, 10] }
+    'id': 'anim_changePlug',
+    'time': [
+        [0, 5],
+        [5, 10],
+        [10, 12.63]
+    ]
+},
+{ 'id': 'anim_info', 'time': [5, 10] }
 ];
 
 function animStart(id) {
