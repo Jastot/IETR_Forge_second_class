@@ -30,19 +30,19 @@ function prepareTree() {
                 "icon": false
             },
             "info": {
-                "icon": "glyphicon glyphicon-book"
+                "icon": "fas fa-book-open"
             },
             "work": {
-                "icon": "glyphicon glyphicon-cog"
+                "icon": "fas fa-cog"
             },
             "components": {
-                "icon": "glyphicon glyphicon-list-alt"
+                "icon": "fas fa-stream"
             },
             "service": {
-                "icon": "glyphicon glyphicon-wrench"
+                "icon": "fas fa-tools"
             },
-            "child": {
-                "icon": "glyphicon glyphicon-menu-right"
+            "child_service": {
+                "icon": "fas fa-oil-can"
             },
             "object": {
                 "icon": false
@@ -168,7 +168,7 @@ let instructions = [{
 
 function animStart(id) {
     timePoints = instructions.find(item => item.id == id).time;
-    steps = $('#textboard').find('.instruction');
+    steps = $('#textboard').find('.instruction').parent();
     $(`#${id}`).on('click', () => {
         aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
         if (!aExt.isPlaying()) {
