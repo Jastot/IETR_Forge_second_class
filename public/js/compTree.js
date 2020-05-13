@@ -1,16 +1,16 @@
-$(document).ready(function () {
+$(document).ready(function() {
     prepareTree();
     $.ajax({
         url: '/tree',
         type: 'GET',
-        success: function (res) {
+        success: function(res) {
             for (item in res) {
                 $('#compTree').jstree(true).settings.core.data[item] = res[item];
             }
             $('#compTree').jstree(true).refresh();
 
         },
-        error: function (err) {
+        error: function(err) {
             console.log(err);
         }
     });
@@ -57,7 +57,7 @@ function buildModelTree(model, createNodeFunc = null) {
     //builds model tree recursively
     function _buildModelTreeRec(node) {
         instanceTree.enumNodeChildren(node.dbId,
-            function (childId) {
+            function(childId) {
                 var childNode = null;
                 if (createNodeFunc) {
                     childNode = createNodeFunc(childId);
@@ -155,9 +155,13 @@ let checkCurTime;
 let timePoints;
 let steps;
 let curTimePoint = 0;
-let instructions = [
-    {
-        'id': 'anim_changePlug', 'time': [5, 10]
+let instructions = [{
+        'id': 'anim_changePlug',
+        'time': [
+            [0, 5],
+            [5, 10],
+            [10, 12.63]
+        ]
     },
     { 'id': 'anim_info', 'time': [5, 10] }
 ];
@@ -182,7 +186,7 @@ function animStart(id) {
                     clearInterval(checkCurTime);
                     checkCurTime = setInterval(() => {
                         changeInstruction();
-                    }, 100);
+                    }, 50);
                     $(`#${id}`).html('Запустить анимацию');
                 }
             })
@@ -197,19 +201,16 @@ function animStart(id) {
 }
 
 function changeInstruction() {
-    for (let i = 0; i <= timePoints.length - 1; i++) {
+    for (let i = 0; i <= steps.length - 1; i++) {
         if (aExt.getCurrentTime() == aExt.getDuration()) {
-            console.log(btnStart.id);
             $(`#${btnStart.id}`).html('Запустить анимацию');
             clearInterval(checkCurTime);
             break;
         }
-        if (aExt.getCurrentTime() >= timePoints[timePoints.length - 1]) {
-            changeSteps(steps.length - 1);
-            break;
-        }
-        if (aExt.getCurrentTime() >= curTimePoint && aExt.getCurrentTime() < timePoints[i]) {
+        if ((aExt.getCurrentTime() >= timePoints[i][0] && aExt.getCurrentTime() < timePoints[i][1])) {
+            console.log("Петр");
             changeSteps(i);
+            curTimePoint = timePoints[i];
             break;
         }
     }
