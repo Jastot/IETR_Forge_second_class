@@ -168,10 +168,14 @@ let instructions = [{
 
 function animStart(id) {
     timePoints = instructions.find(item => item.id == id).time;
-    steps = $('.maintext').children();
+    steps = $('#textboard').find('.instruction');
     $(`#${id}`).on('click', () => {
         aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
         if (!aExt.isPlaying()) {
+            if (aExt.getCurrentTime() !== 0) {
+                aExt.play();
+                return;
+            }
             if (checkCurTime != 'undefined') {
                 clearInterval(checkCurTime);
             }
@@ -180,22 +184,14 @@ function animStart(id) {
             checkCurTime = setInterval(() => {
                 changeInstruction();
             }, 100);
-            $(`#${id}`).html('Остановить анимацию');
             $('.animation-timeline').on('input', () => {
                 if (checkCurTime != 'undefined') {
                     clearInterval(checkCurTime);
                     checkCurTime = setInterval(() => {
                         changeInstruction();
                     }, 50);
-                    $(`#${id}`).html('Запустить анимацию');
                 }
             })
-        } else {
-            if (checkCurTime != 'undefined') {
-                clearInterval(checkCurTime);
-                aExt.pause();
-                $(`#${id}`).html('Запустить анимацию');
-            }
         }
     });
 }
@@ -203,12 +199,10 @@ function animStart(id) {
 function changeInstruction() {
     for (let i = 0; i <= steps.length - 1; i++) {
         if (aExt.getCurrentTime() == aExt.getDuration()) {
-            $(`#${btnStart.id}`).html('Запустить анимацию');
-            clearInterval(checkCurTime);
+            $(steps[steps.length - 1]).removeClass('activeText');
             break;
         }
         if ((aExt.getCurrentTime() >= timePoints[i][0] && aExt.getCurrentTime() < timePoints[i][1])) {
-            console.log("Петр");
             changeSteps(i);
             curTimePoint = timePoints[i];
             break;
