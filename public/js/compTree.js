@@ -163,12 +163,15 @@ let instructions = [{
         [10, 12.63]
     ]
 },
-{ 'id': 'anim_info', 'time': [5, 10] }
 ];
 
 function animStart(id) {
-    timePoints = instructions.find(item => item.id == id).time;
-    steps = $('#textboard').find('.instruction').parent();
+    for (let item of instructions) {
+        if (item.id === id) {
+            timePoints = instructions.find(item => item.id == id).time;
+            steps = $('#textboard').find('.instruction').parent();
+        }
+    }
     $(`#${id}`).on('click', () => {
         aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
         if (!aExt.isPlaying()) {
@@ -181,15 +184,19 @@ function animStart(id) {
             }
             aExt.load();
             aExt.play();
-            checkCurTime = setInterval(() => {
-                changeInstruction();
-            }, 100);
+            if (timePoints && steps.length > 0) {
+                checkCurTime = setInterval(() => {
+                    changeInstruction();
+                }, 100);
+            }
             $('.animation-timeline').on('input', () => {
-                if (checkCurTime != 'undefined') {
-                    clearInterval(checkCurTime);
-                    checkCurTime = setInterval(() => {
-                        changeInstruction();
-                    }, 50);
+                if (timePoints && steps.length > 0) {
+                    if (checkCurTime != 'undefined') {
+                        clearInterval(checkCurTime);
+                        checkCurTime = setInterval(() => {
+                            changeInstruction();
+                        }, 50);
+                    }
                 }
             })
         }
@@ -211,12 +218,10 @@ function changeInstruction() {
 }
 
 function changeSteps(index) {
-    if (steps.length > 0) {
-        for (let item of steps) {
-            if (item === steps[index])
-                $(item).addClass('activeText');
-            else
-                $(item).removeClass('activeText');
-        }
+    for (let item of steps) {
+        if (item === steps[index])
+            $(item).addClass('activeText');
+        else
+            $(item).removeClass('activeText');
     }
 }
