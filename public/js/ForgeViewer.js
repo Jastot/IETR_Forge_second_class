@@ -112,7 +112,6 @@ function treeEvents() {
                 type: 'GET',
                 data: { 'type': data.node.type },
                 success: function(res) {
-                    console.log(res);
                     getModel(Number(res));
                     $('#toolbar-animation-Close').click();
                     $('.homeViewWrapper').click();
@@ -171,16 +170,13 @@ function treeEvents() {
 let curModel;
 
 function getModel(time) {
-    let modelArray = [1, 2, 3, 4];
     let visible = viewer.getVisibleModels();
     let models = visible.concat(viewer.getHiddenModels());
-    console.log(models);
     for (let item of models) {
         if (item.myData.animations) {
             if (item.myData.animations.duration !== time) {
                 viewer.hideModel(item.id);
             } else if (curModel !== item) {
-                console.log(item.myData.animations.duration);
                 curModel = item;
                 viewer.showModel(item.id);
                 viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
@@ -192,39 +188,7 @@ function getModel(time) {
         } else {
             viewer.hideModel(item.id);
         }
-
     }
-
-
-    // for (item of modelArray) {
-    //     let scene = viewer.impl.modelQueue();
-    //     let model = scene.findModel(item);
-
-    //     if (model.myData.animations) {
-    //         if (model.myData.animations.duration !== time) {
-    //             viewer.impl.removeModel(model);
-    //             scene.addHiddenModel(model);
-    //             // viewer.hideModel(model.id);
-    //         } else {
-    //             if (curModel !== time) {
-    //                 curModel = time;
-    //                 console.log(model.id);
-    //                 viewer.showModel(model.id);
-    //                 viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-    //             }
-    //         }
-    //     } else {
-    //         if (time == 1 && curModel !== time) {
-    //             curModel = time;
-    //             viewer.showModel(model.id);
-    //             viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
-    //         } else {
-    //             viewer.impl.removeModel(model);
-    //             scene.addHiddenModel(model);
-    //         }
-    //     }
-
-    // }
 }
 
 
