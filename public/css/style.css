@@ -487,6 +487,10 @@ p {
     max-width: 100%;
 }
 
+.textInfo ul{
+    margin-bottom: 0;
+}
+
 .instruction {
     transition: background 0.8s;
 }
@@ -500,4 +504,12 @@ p {
     text-shadow: 1px 1px 1px #beebff;
     font-weight: bold;
     transition: all 0.01s ease-in-out;
+}
+
+.btn-group-vertical button{
+    border-radius: 0.25rem!important;
+}
+
+#animToggle, #animQuit{
+    display: none;
 }
