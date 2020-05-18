@@ -76,7 +76,7 @@ app.get('/tree', function(req, res) {
 });
 
 app.get('/model_id', function(req, res) {
-    db.collection('model_id').find({ type: req.query.type }).toArray(function(err, obj) {
+    db.collection('model_id').find({ id: req.query.id }).toArray(function(err, obj) {
         if (err) {
             console.log(err);
         }

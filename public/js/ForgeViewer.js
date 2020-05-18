@@ -8,12 +8,13 @@ $(document).ready(function() {
     var urn5 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZTIxMjMxLmYzZA==';
     var urn6 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZVJseUxhc3QuZjNk';
     var urn7 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZVYyLmYzZA==';
+    var urn8 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZV9GLmYzZA==';
     getForgeToken(function(access_token) {
         jQuery.ajax({
-            url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn7 + '/manifest',
+            url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn8 + '/manifest',
             headers: { 'Authorization': 'Bearer ' + access_token },
             success: function(res) {
-                if (res.status === 'success') launchViewer(urn7);
+                if (res.status === 'success') launchViewer(urn8);
                 else $("#forgeViewer").html('Преобразование всё ещё выполняется').css('color', 'lightblue');
             }
         });
@@ -110,7 +111,7 @@ function treeEvents() {
             $.ajax({
                 url: '/model_id',
                 type: 'GET',
-                data: { 'type': data.node.type },
+                data: { 'id': data.node.id },
                 success: function(res) {
                     getModel(Number(res));
                     $('#toolbar-animation-Close').click();
@@ -172,6 +173,7 @@ let curModel;
 function getModel(time) {
     let visible = viewer.getVisibleModels();
     let models = visible.concat(viewer.getHiddenModels());
+    console.log(models);
     for (let item of models) {
         if (item.myData.animations) {
             if (item.myData.animations.duration !== time) {
@@ -181,10 +183,12 @@ function getModel(time) {
                 viewer.showModel(item.id);
                 viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
             }
-        } else if (time == 1 && curModel !== item) {
-            curModel = item;
-            viewer.showModel(item.id);
-            viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+        } else if (time == 1) {
+            if (curModel !== item) {
+                curModel = item;
+                viewer.showModel(item.id);
+                viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
+            }
         } else {
             viewer.hideModel(item.id);
         }
