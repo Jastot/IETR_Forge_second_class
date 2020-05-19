@@ -1,3 +1,10 @@
+var annotationsArray = [];
+let panel;
+var index;
+let html_str;
+var cam;
+var annotationDiv;
+var screenpoints = [];
 class Markup3dExtension extends Autodesk.Viewing.Extension {
     constructor(viewer, options) {
         super(viewer, options);
@@ -29,11 +36,10 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
             this._group = new Autodesk.Viewing.UI.ControlGroup('allMyAwesomeExtensionsToolbar');
             this.viewer.toolbar.addControl(this._group);
         }
-        let panel = this.panel;
-        var index = 1;
-        let html_str = '';
-        var cam = viewer.impl.camera;
-        var annotationDiv;
+        panel = this.panel;
+        index = 1;
+        html_str = '';
+        cam = viewer.impl.camera;
         if (annotationDiv == undefined) {
             annotationDiv = $('.progressbg').after(`<div id="annotations"></div>`);
         }
@@ -75,11 +81,11 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                             url: "/annotations",
                             type: 'POST',
                             data: { 'annotation': ann_obj },
-                            success: function () {
+                            success: function() {
                                 getAnnotations();
 
                             },
-                            error: function (err) {
+                            error: function(err) {
                                 console.log(err);
                             }
                         });
@@ -94,63 +100,6 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
             }
         })
 
-        var annotationsArray = [];
-
-
-
-
-        function getAnnotations() {
-            $.ajax({
-                url: '/annotations',
-                type: 'GET',
-                success: function (res) {
-                    return res;
-                },
-                error: function (err) {
-                    console.log(err);
-                }
-            }).then((res) => {
-                annotationsArray = res;
-                if (annotationsArray.length > 0) {
-                    index = Number(annotationsArray[0].index);
-                    for (let item of annotationsArray) {
-                        // item.particle = new THREE.Vector3(item.x, item.y, item.z);
-                        let div = $(`#annotation_${item.index}`)[0];
-                        if (typeof div == 'undefined') {
-                            placeAnnotation(item.text, Number(item.index), item.sX, item.sY);
-                        }
-                    }
-                }
-                updateScreenPosition();
-                // updateAnnotationOpacity();
-            })
-        }
-
-        function clearAnnotations() {
-            if (annotationsArray.length > 0) {
-                // for (item of annotationsArray) {
-                //     let div = $(`#annotation_${Number(item.index)}`)[0];
-                //     if (div) {
-                //         div.remove(div);
-                //         console.log(item.index);
-                //     }
-
-                // }
-                $("#annotations").empty();
-                annotationsArray = [];
-                html_str = "";
-            }
-        }
-
-        function placeAnnotation(text, index, x, y) {
-            if (text == '') {
-                html_str += `<div class="annotation annotation-without-text" id="annotation_${index}" style="top:${y}px; left:${x}px;"><span class="annotationIndex">${index}</span><span class= 'annotation-btn-close _wt'></span></div>`;
-            } else {
-                html_str += `<div class="annotation" id="annotation_${index}" style="top:${y}px; left:${x}px;"><span class="annotationIndex">${index}</span><span id = 'annotationText'>${text}</span><span class= 'annotation-btn-close'></span></div>`;
-            }
-            $("#annotations").html(html_str);
-            viewer.clearSelection();
-        }
 
         $('#forgeViewer').on('mouseover', e => {
             if (e.target.className == 'annotationIndex' || e.target.id == 'annotationText') {
@@ -173,42 +122,19 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                         url: '/annotations',
                         type: 'DELETE',
                         data: { "id": id },
-                        success: function (res) {
+                        success: function(res) {
                             div.remove(div);
                             getAnnotations();
                         },
-                        error: function (err) {
+                        error: function(err) {
                             console.log(err);
                         }
                     })
                 }
             }
         });
-        var screenpoints = [];
 
-        function updateScreenPosition() {
-            for (let i = 0; i < index; i++) {
-                screenpoints[i] = viewer.impl.worldToClient(new THREE.Vector3(annotationsArray[i].x, annotationsArray[i].y, annotationsArray[i].z), cam);
-                let anid = '#annotation_' + annotationsArray[i].index;
-                $(anid).css('top', screenpoints[i].y);
-                $(anid).css('left', screenpoints[i].x);
-            }
-        }
 
-        function updateAnnotationOpacity() {
-            let cam_pose = cam.position;
-            for (let i = 0; i < index; i++) {
-                let close_p = viewer.impl.clientToWorld(screenpoints[i].x, screenpoints[i].y);
-                let dst1 = cam_pose.distanceTo(new THREE.Vector3(annotationsArray[i].x, annotationsArray[i].y, annotationsArray[i].z));
-                let dst2 = cam_pose.distanceTo(close_p.point);
-                if (dst2 < 0.99 * dst1) {
-                    $(`#annotation_${annotationsArray[i].index}`).css("opacity", "0");
-
-                } else {
-                    $(`#annotation_${annotationsArray[i].index}`).css("opacity", "1");
-                }
-            }
-        }
 
         viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, () => {
             if (annotationsArray.length) {
@@ -217,7 +143,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
             }
         });
 
-        $('#compTree').on("activate_node.jstree", function (evt, data) {
+        $('#compTree').on("activate_node.jstree", function(evt, data) {
             if (data != null && data.node != null && data.node.id == 'info') {
                 getAnnotations();
             } else {
@@ -230,6 +156,85 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
         this._group.addControl(this._button);
     }
 }
+
+
+function getAnnotations() {
+    $.ajax({
+        url: '/annotations',
+        type: 'GET',
+        success: function(res) {
+            return res;
+        },
+        error: function(err) {
+            console.log(err);
+        }
+    }).then((res) => {
+        annotationsArray = res;
+        if (annotationsArray.length > 0) {
+            index = Number(annotationsArray[0].index);
+            for (let item of annotationsArray) {
+                // item.particle = new THREE.Vector3(item.x, item.y, item.z);
+                let div = $(`#annotation_${item.index}`)[0];
+                if (typeof div == 'undefined') {
+                    placeAnnotation(item.text, Number(item.index), item.sX, item.sY);
+                }
+            }
+        }
+        updateScreenPosition();
+        // updateAnnotationOpacity();
+    })
+}
+
+function placeAnnotation(text, index, x, y) {
+    if (text == '') {
+        html_str += `<div class="annotation annotation-without-text" id="annotation_${index}" style="top:${y}px; left:${x}px;"><span class="annotationIndex">${index}</span><span class= 'annotation-btn-close _wt'></span></div>`;
+    } else {
+        html_str += `<div class="annotation" id="annotation_${index}" style="top:${y}px; left:${x}px;"><span class="annotationIndex">${index}</span><span id = 'annotationText'>${text}</span><span class= 'annotation-btn-close'></span></div>`;
+    }
+    $("#annotations").html(html_str);
+    viewer.clearSelection();
+}
+
+function clearAnnotations() {
+    if (annotationsArray.length > 0) {
+        // for (item of annotationsArray) {
+        //     let div = $(`#annotation_${Number(item.index)}`)[0];
+        //     if (div) {
+        //         div.remove(div);
+        //         console.log(item.index);
+        //     }
+
+        // }
+        $("#annotations").empty();
+        annotationsArray = [];
+        html_str = "";
+    }
+}
+
+function updateScreenPosition() {
+    for (let i = 0; i < index; i++) {
+        screenpoints[i] = viewer.impl.worldToClient(new THREE.Vector3(annotationsArray[i].x, annotationsArray[i].y, annotationsArray[i].z), cam);
+        let anid = '#annotation_' + annotationsArray[i].index;
+        $(anid).css('top', screenpoints[i].y);
+        $(anid).css('left', screenpoints[i].x);
+    }
+}
+
+function updateAnnotationOpacity() {
+    let cam_pose = cam.position;
+    for (let i = 0; i < index; i++) {
+        let close_p = viewer.impl.clientToWorld(screenpoints[i].x, screenpoints[i].y);
+        let dst1 = cam_pose.distanceTo(new THREE.Vector3(annotationsArray[i].x, annotationsArray[i].y, annotationsArray[i].z));
+        let dst2 = cam_pose.distanceTo(close_p.point);
+        if (dst2 < 0.99 * dst1) {
+            $(`#annotation_${annotationsArray[i].index}`).css("opacity", "0");
+
+        } else {
+            $(`#annotation_${annotationsArray[i].index}`).css("opacity", "1");
+        }
+    }
+}
+
 // *******************************************
 // My Awesome (Docking) Panel
 // *******************************************
@@ -258,7 +263,7 @@ function TextPanel(viewer, container, id, title, options) {
 
 TextPanel.prototype = Object.create(Autodesk.Viewing.UI.DockingPanel.prototype);
 TextPanel.prototype.constructor = TextPanel;
-TextPanel.prototype.initialize = function () {
+TextPanel.prototype.initialize = function() {
     // Override DockingPanel initialize()
     this.title = this.createTitleBar(this.titleLabel || this.container.id);
     this.title.style.fontSize = '26px';

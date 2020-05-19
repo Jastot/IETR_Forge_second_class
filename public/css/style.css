@@ -125,7 +125,7 @@ p {
 }
 
 .viewer {
-    padding: 0;
+    padding: 0 0 0 10px;
 }
 
 .textboard {
@@ -487,7 +487,7 @@ p {
     max-width: 100%;
 }
 
-.textInfo ul{
+.textInfo ul {
     margin-bottom: 0;
 }
 
@@ -506,10 +506,33 @@ p {
     transition: all 0.01s ease-in-out;
 }
 
-.btn-group-vertical button{
+.btn-group-vertical button {
     border-radius: 0.25rem!important;
 }
 
-#animToggle, #animQuit{
+#animToggle,
+#animQuit {
     display: none;
 }
+
+.col-xs-0,
+.col-sm-0,
+.col-md-0,
+.col-lg-0 {
+    flex-shrink: 1;
+    transition: all 800ms;
+    max-width: 0;
+    opacity: 0;
+}
+
+
+/* .col-xs-9,
+.col-sm-9,
+.col-md-9,
+.col-lg-9 {
+    /* flex-grow: 1;
+    transition: all 800ms ease; */
+
+
+}
+*/
