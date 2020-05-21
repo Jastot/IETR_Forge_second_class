@@ -192,17 +192,7 @@ function animStart(id) {
             if (checkCurTime != 'undefined') {
                 clearInterval(checkCurTime);
             }
-            aExt.load();
-            aExt.play();
-            checkStateAnim = setInterval(() => {
-                if (aExt.isPlaying()) {
-                    $('#animToggle').html('<i class="fas fa-pause"></i>');
-                } else {
-                    $('#animToggle').html('<i class="fas fa-play"></i>');
-                }
-            }, 500);
-            $('#animToggle').html('<i class="fas fa-pause"></i>');
-            $(`#${id}`).prop('disabled', true);
+
             if (id === 'anim_info') {
                 clearAnnotations();
                 $('#tree').removeClass('col-sm-2 col-md-2 col-sm-3 col-md-3').addClass('col-md-0 col-sm-0');
@@ -210,6 +200,23 @@ function animStart(id) {
                 setTimeout(() => {
                     $('.viewer').removeClass('col-sm-6 col-md-6').addClass('col-sm-9 col-md-9');
                     viewer.resize();
+                    aExt.load();
+                    aExt.play();
+                    $('#animToggle').html('<i class="fas fa-pause"></i>');
+                    $(`#${id}`).prop('disabled', true);
+                    $('.animation-timeline').on('change', () => {
+                        $('#animToggle').html('<i class="fas fa-play"></i>');
+                    })
+                    $('.animation-timeline').on('input', () => {
+                        if (timePoints && steps.length > 0) {
+                            if (checkCurTime != 'undefined') {
+                                clearInterval(checkCurTime);
+                                checkCurTime = setInterval(() => {
+                                    changeInstruction();
+                                }, 50);
+                            }
+                        }
+                    })
                 }, 800);
 
                 $('#animQuit').on('click', () => {
@@ -257,18 +264,8 @@ function animStart(id) {
                     changeInstruction();
                 }, 100);
             }
-            $('.animation-timeline').on('input', () => {
-                $('#animToggle').html('<i class="fas fa-play"></i>');
-                if (timePoints && steps.length > 0) {
-                    if (checkCurTime != 'undefined') {
-                        clearInterval(checkCurTime);
-                        checkCurTime = setInterval(() => {
-                            changeInstruction();
-                        }, 50);
-                    }
-                }
-            })
         }
+
     });
 }
 

@@ -67,7 +67,7 @@ function onDocumentLoadSuccess(doc) {
             // let components = buildModelTree(viewer.model);
             // let comp_data = components;
             // let chi = get_children(comp_data.children);
-            console.log(e.model);
+            // console.log(e.model);
             if (e.model.id === 4) {
                 $("#compTree").jstree("select_node", 'info');
                 $("#compTree").jstree("activate_node", 'info');
@@ -116,8 +116,7 @@ function treeEvents() {
                     data: { 'type': data.node.type },
                     success: function (res) {
                         getModel(Number(res));
-                        $('#toolbar-animation-Close').click();
-                        $('.homeViewWrapper').click();
+
                     },
                     error: function (err) {
                         console.log(err);
@@ -130,8 +129,6 @@ function treeEvents() {
                     data: { 'id': data.node.id },
                     success: function (res) {
                         getModel(Number(res));
-                        $('#toolbar-animation-Close').click();
-                        $('.homeViewWrapper').click();
                     },
                     error: function (err) {
                         console.log(err);
@@ -164,10 +161,17 @@ function getText(data) {
             }).then(() => {
                 viewer.isolate(Number(dbid));
                 isolated = dbid;
+                $('#toolbar-animation-Close').click();
+                $('.homeViewWrapper').click();
                 viewer.fitToView(Number(dbid));
             });
+        } else {
+            $('#toolbar-animation-Close').click();
+            $('.homeViewWrapper').click();
+            viewer.fitToView(Number(dbid));
         }
     } else if (lastNode != data.node.id) {
+        viewer.isolate(0);
         lastNode = data.node.id;
         $.ajax({
             url: '/tree/texts',
@@ -177,12 +181,13 @@ function getText(data) {
                 let name = res.name;
                 let text = res.text;
                 adjustLayout(name, text);
+                $('#toolbar-animation-Close').click();
+                $('.homeViewWrapper').click();
             },
             error: function (err) {
                 console.log(err);
             }
         });
-
     }
 }
 
