@@ -81,11 +81,11 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                             url: "/annotations",
                             type: 'POST',
                             data: { 'annotation': ann_obj },
-                            success: function() {
+                            success: function () {
                                 getAnnotations();
 
                             },
-                            error: function(err) {
+                            error: function (err) {
                                 console.log(err);
                             }
                         });
@@ -122,11 +122,11 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                         url: '/annotations',
                         type: 'DELETE',
                         data: { "id": id },
-                        success: function(res) {
+                        success: function (res) {
                             div.remove(div);
                             getAnnotations();
                         },
-                        error: function(err) {
+                        error: function (err) {
                             console.log(err);
                         }
                     })
@@ -143,8 +143,8 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
             }
         });
 
-        $('#compTree').on("activate_node.jstree", function(evt, data) {
-            if (data != null && data.node != null && data.node.id == 'info') {
+        $('#compTree').on("activate_node.jstree", function (evt, data) {
+            if (data != null && data.node != null && data.node.id == 'components') {
                 getAnnotations();
             } else {
                 clearAnnotations();
@@ -162,10 +162,10 @@ function getAnnotations() {
     $.ajax({
         url: '/annotations',
         type: 'GET',
-        success: function(res) {
+        success: function (res) {
             return res;
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
         }
     }).then((res) => {
@@ -263,7 +263,7 @@ function TextPanel(viewer, container, id, title, options) {
 
 TextPanel.prototype = Object.create(Autodesk.Viewing.UI.DockingPanel.prototype);
 TextPanel.prototype.constructor = TextPanel;
-TextPanel.prototype.initialize = function() {
+TextPanel.prototype.initialize = function () {
     // Override DockingPanel initialize()
     this.title = this.createTitleBar(this.titleLabel || this.container.id);
     this.title.style.fontSize = '26px';
