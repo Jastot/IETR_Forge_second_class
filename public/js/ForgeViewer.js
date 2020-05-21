@@ -8,7 +8,7 @@ $(document).ready(function () {
     var urn5 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZTIxMjMxLmYzZA==';
     var urn6 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZVJseUxhc3QuZjNk';
     var urn7 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZVYyLmYzZA==';
-    var urn8 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZUxhc3RBbmltc3MuZjNk';
+    var urn8 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZUxhc3RMYXN0LmYzZA==';
     getForgeToken(function (access_token) {
         jQuery.ajax({
             url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn8 + '/manifest',

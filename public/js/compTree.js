@@ -1,16 +1,16 @@
-$(document).ready(function() {
+$(document).ready(function () {
     prepareTree();
     $.ajax({
         url: '/tree',
         type: 'GET',
-        success: function(res) {
+        success: function (res) {
             for (item in res) {
                 $('#compTree').jstree(true).settings.core.data[item] = res[item];
             }
             $('#compTree').jstree(true).refresh();
 
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
         }
     });
@@ -57,7 +57,7 @@ function buildModelTree(model, createNodeFunc = null) {
     //builds model tree recursively
     function _buildModelTreeRec(node) {
         instanceTree.enumNodeChildren(node.dbId,
-            function(childId) {
+            function (childId) {
                 var childNode = null;
                 if (createNodeFunc) {
                     childNode = createNodeFunc(childId);
@@ -152,26 +152,27 @@ function adjustLayout(name, text) {
 let btnStart;
 var aExt;
 let checkCurTime;
+let checkStateAnim;
 let timePoints;
 let steps;
 let curTimePoint = 0;
 let instructions = [{
-        'id': 'anim_changePlug',
-        'time': [
-            [2, 5],
-            [5, 10],
-            [10, 12.63]
-        ]
-    },
-    {
-        'id': 'anim_changeGasket',
-        'time': [
-            [2, 5],
-            [5, 10],
-            [10, 16],
-            [16, 24],
-        ]
-    }
+    'id': 'anim_changePlug',
+    'time': [
+        [2, 5],
+        [5, 10],
+        [10, 12.63]
+    ]
+},
+{
+    'id': 'anim_changeGasket',
+    'time': [
+        [2, 5],
+        [5, 10],
+        [10, 16],
+        [16, 24],
+    ]
+}
 ];
 
 function animStart(id) {
@@ -193,16 +194,24 @@ function animStart(id) {
             }
             aExt.load();
             aExt.play();
+            checkStateAnim = setInterval(() => {
+                if (aExt.isPlaying()) {
+                    $('#animToggle').html('<i class="fas fa-pause"></i>');
+                } else {
+                    $('#animToggle').html('<i class="fas fa-play"></i>');
+                }
+            }, 500);
+            $('#animToggle').html('<i class="fas fa-pause"></i>');
+            $(`#${id}`).prop('disabled', true);
             if (id === 'anim_info') {
                 clearAnnotations();
-                $('#anim_info').prop('disabled', true);
                 $('#tree').removeClass('col-sm-2 col-md-2 col-sm-3 col-md-3').addClass('col-md-0 col-sm-0');
                 $('#compTree').jstree("close_all");
                 setTimeout(() => {
                     $('.viewer').removeClass('col-sm-6 col-md-6').addClass('col-sm-9 col-md-9');
                     viewer.resize();
                 }, 800);
-                $('#animQuit').css('display', 'inline-block');
+
                 $('#animQuit').on('click', () => {
                     aExt.setTimelineValue(0);
                     $('#toolbar-animation-Close').click();
@@ -214,9 +223,24 @@ function animStart(id) {
                     $('#animToggle').css('display', 'none');
                     $('.homeViewWrapper').click();
                     getAnnotations();
-
+                });
+            } else {
+                $('#animQuit').on('click', () => {
+                    aExt.setTimelineValue(0);
+                    $('#toolbar-animation-Close').click();
+                    $(`#${id}`).prop('disabled', false);
+                    $('#animQuit').css('display', 'none');
+                    $('#animToggle').css('display', 'none');
+                    $('.homeViewWrapper').click();
+                    if (steps !== undefined) {
+                        for (let index in steps) {
+                            $(steps[index]).removeClass('activeText');
+                        }
+                    }
+                    clearInterval(checkStateAnim);
                 });
             }
+            $('#animQuit').css('display', 'inline-block');
             $('#animToggle').css('display', 'inline-block');
             $('#animToggle').on('click', () => {
                 if (aExt.isPlaying()) {
@@ -234,6 +258,7 @@ function animStart(id) {
                 }, 100);
             }
             $('.animation-timeline').on('input', () => {
+                $('#animToggle').html('<i class="fas fa-play"></i>');
                 if (timePoints && steps.length > 0) {
                     if (checkCurTime != 'undefined') {
                         clearInterval(checkCurTime);
