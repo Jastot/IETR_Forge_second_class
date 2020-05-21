@@ -37,7 +37,7 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
             this.viewer.toolbar.addControl(this._group);
         }
         panel = this.panel;
-        index = 1;
+        index = 0;
         html_str = '';
         cam = viewer.impl.camera;
         if (annotationDiv == undefined) {
@@ -117,13 +117,13 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
                 if (e.target.style.opacity == 1) {
                     let div = e.target.parentNode;
                     let id = div.id.replace("annotation_", "");
-                    console.log(id);
                     $.ajax({
                         url: '/annotations',
                         type: 'DELETE',
                         data: { "id": id },
                         success: function (res) {
                             div.remove(div);
+                            html_str = $('#annotations').html();
                             getAnnotations();
                         },
                         error: function (err) {
@@ -173,12 +173,13 @@ function getAnnotations() {
         if (annotationsArray.length > 0) {
             index = Number(annotationsArray[0].index);
             for (let item of annotationsArray) {
-                // item.particle = new THREE.Vector3(item.x, item.y, item.z);
                 let div = $(`#annotation_${item.index}`)[0];
-                if (typeof div == 'undefined') {
+                if (div === undefined) {
                     placeAnnotation(item.text, Number(item.index), item.sX, item.sY);
                 }
             }
+        } else {
+            index = 0;
         }
         updateScreenPosition();
         // updateAnnotationOpacity();
@@ -212,7 +213,7 @@ function clearAnnotations() {
 }
 
 function updateScreenPosition() {
-    for (let i = 0; i < index; i++) {
+    for (let i = 0; i < annotationsArray.length; i++) {
         screenpoints[i] = viewer.impl.worldToClient(new THREE.Vector3(annotationsArray[i].x, annotationsArray[i].y, annotationsArray[i].z), cam);
         let anid = '#annotation_' + annotationsArray[i].index;
         $(anid).css('top', screenpoints[i].y);
