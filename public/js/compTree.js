@@ -179,7 +179,7 @@ function animStart(id) {
     for (let item of instructions) {
         if (item.id === id) {
             timePoints = instructions.find(item => item.id == id).time;
-            steps = $('#textboard').find('.instruction').parent();
+            steps = $('#textboard').find('.instruction').parent().get();
         }
     }
     $(`#${id}`).on('click', () => {
@@ -193,30 +193,17 @@ function animStart(id) {
                 clearInterval(checkCurTime);
             }
 
+
+            aExt.load();
+            aExt.play();
+
             if (id === 'anim_info') {
-                clearAnnotations();
                 $('#tree').removeClass('col-sm-2 col-md-2 col-sm-3 col-md-3').addClass('col-md-0 col-sm-0');
                 $('#compTree').jstree("close_all");
+
                 setTimeout(() => {
                     $('.viewer').removeClass('col-sm-6 col-md-6').addClass('col-sm-9 col-md-9');
                     viewer.resize();
-                    aExt.load();
-                    aExt.play();
-                    $('#animToggle').html('<i class="fas fa-pause"></i>');
-                    $(`#${id}`).prop('disabled', true);
-                    $('.animation-timeline').on('change', () => {
-                        $('#animToggle').html('<i class="fas fa-play"></i>');
-                    })
-                    $('.animation-timeline').on('input', () => {
-                        if (timePoints && steps.length > 0) {
-                            if (checkCurTime != 'undefined') {
-                                clearInterval(checkCurTime);
-                                checkCurTime = setInterval(() => {
-                                    changeInstruction();
-                                }, 50);
-                            }
-                        }
-                    })
                 }, 800);
 
                 $('#animQuit').on('click', () => {
@@ -229,7 +216,6 @@ function animStart(id) {
                     $('#animQuit').css('display', 'none');
                     $('#animToggle').css('display', 'none');
                     $('.homeViewWrapper').click();
-                    getAnnotations();
                 });
             } else {
                 $('#animQuit').on('click', () => {
@@ -247,6 +233,31 @@ function animStart(id) {
                     clearInterval(checkStateAnim);
                 });
             }
+
+            $('.animation-timeline').on('change', () => {
+                $('#animToggle').html('<i class="fas fa-play"></i>');
+            });
+
+            $('.animation-timeline').on('input', () => {
+                if (timePoints && steps.length > 0) {
+                    if (checkCurTime != 'undefined') {
+                        clearInterval(checkCurTime);
+                        checkCurTime = setInterval(() => {
+                            changeInstruction();
+                        }, 50);
+                    }
+                }
+            });
+
+            viewer.addEventListener(Autodesk.Viewing.CAMERA_CHANGE_EVENT, () => {
+                if (!aExt.isPlaying()) {
+                    $('#animToggle').html('<i class="fas fa-play"></i>');
+                }
+            });
+
+            $('#animToggle').html('<i class="fas fa-pause"></i>');
+            $(`#${id}`).prop('disabled', true);
+
             $('#animQuit').css('display', 'inline-block');
             $('#animToggle').css('display', 'inline-block');
             $('#animToggle').on('click', () => {
