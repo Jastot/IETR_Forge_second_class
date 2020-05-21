@@ -95,6 +95,9 @@ function treeEvents() {
         if (data.node.id === 'components' || data.node.id === 'service') {
             var row = $(".row").children();
             $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
+            setTimeout(() => {
+                viewer.resize();
+            }, 450);
             viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
         }
     });
@@ -103,6 +106,9 @@ function treeEvents() {
         if ((data.node.id === 'components' || data.node.id === 'service') && !$("#compTree").jstree(true).get_node("components").state.opened && !$("#compTree").jstree(true).get_node("service").state.opened) {
             var row = $(".row").children();
             $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
+            setTimeout(() => {
+                viewer.resize();
+            }, 450);
             viewer.setBackgroundColor(242, 242, 242, 242, 242, 242);
         }
     });
