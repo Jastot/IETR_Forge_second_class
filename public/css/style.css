@@ -369,9 +369,9 @@ p {
 }
 
 
-/* .adsk-viewing-viewer #toolbar-modelStructureTool {
+.adsk-viewing-viewer #toolbar-modelStructureTool {
     display: none!important;
-} */
+}
 
 .adsk-viewing-viewer #toolbar-explodeTool {
     display: none!important;
@@ -390,6 +390,14 @@ p {
 }
 
 .adsk-viewing-viewer #toolbar-bimWalkTool {
+    display: none!important;
+}
+
+.adsk-viewing-viewer #allMyAwesomeExtensionsToolbar {
+    display: none!important;
+}
+
+.adsk-viewing-viewer #toolbar-animationPlay {
     display: none!important;
 }
 

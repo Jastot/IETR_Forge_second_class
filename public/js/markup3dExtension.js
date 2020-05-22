@@ -101,38 +101,38 @@ class Markup3dExtension extends Autodesk.Viewing.Extension {
         })
 
 
-        $('#forgeViewer').on('mouseover', e => {
-            if (e.target.className == 'annotationIndex' || e.target.id == 'annotationText') {
-                let div = e.target.parentNode;
-                let closebtn = div.lastChild;
-                closebtn.style.opacity = 1;
-                $(`#${div.id}`).on('mouseleave', () => {
-                    closebtn.style.opacity = 0;
-                });
-            }
-        });
+        // $('#forgeViewer').on('mouseover', e => {
+        //     if (e.target.className == 'annotationIndex' || e.target.id == 'annotationText') {
+        //         let div = e.target.parentNode;
+        //         let closebtn = div.lastChild;
+        //         closebtn.style.opacity = 1;
+        //         $(`#${div.id}`).on('mouseleave', () => {
+        //             closebtn.style.opacity = 0;
+        //         });
+        //     }
+        // });
 
-        $('#forgeViewer').on('click', e => {
-            if (e.target.className == 'annotation-btn-close _wt' || e.target.className == 'annotation-btn-close') {
-                if (e.target.style.opacity == 1) {
-                    let div = e.target.parentNode;
-                    let id = div.id.replace("annotation_", "");
-                    $.ajax({
-                        url: '/annotations',
-                        type: 'DELETE',
-                        data: { "id": id },
-                        success: function (res) {
-                            div.remove(div);
-                            html_str = $('#annotations').html();
-                            getAnnotations();
-                        },
-                        error: function (err) {
-                            console.log(err);
-                        }
-                    })
-                }
-            }
-        });
+        // $('#forgeViewer').on('click', e => {
+        //     if (e.target.className == 'annotation-btn-close _wt' || e.target.className == 'annotation-btn-close') {
+        //         if (e.target.style.opacity == 1) {
+        //             let div = e.target.parentNode;
+        //             let id = div.id.replace("annotation_", "");
+        //             $.ajax({
+        //                 url: '/annotations',
+        //                 type: 'DELETE',
+        //                 data: { "id": id },
+        //                 success: function (res) {
+        //                     div.remove(div);
+        //                     html_str = $('#annotations').html();
+        //                     getAnnotations();
+        //                 },
+        //                 error: function (err) {
+        //                     console.log(err);
+        //                 }
+        //             })
+        //         }
+        //     }
+        // });
 
 
 

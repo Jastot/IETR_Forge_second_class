@@ -1,16 +1,16 @@
-$(document).ready(function() {
+$(document).ready(function () {
     prepareTree();
     $.ajax({
         url: '/tree',
         type: 'GET',
-        success: function(res) {
+        success: function (res) {
             for (item in res) {
                 $('#compTree').jstree(true).settings.core.data[item] = res[item];
             }
             $('#compTree').jstree(true).refresh();
 
         },
-        error: function(err) {
+        error: function (err) {
             console.log(err);
         }
     });
@@ -57,7 +57,7 @@ function buildModelTree(model, createNodeFunc = null) {
     //builds model tree recursively
     function _buildModelTreeRec(node) {
         instanceTree.enumNodeChildren(node.dbId,
-            function(childId) {
+            function (childId) {
                 var childNode = null;
                 if (createNodeFunc) {
                     childNode = createNodeFunc(childId);
@@ -152,27 +152,37 @@ function adjustLayout(name, text) {
 let btnStart;
 var aExt;
 let checkCurTime;
-let checkStateAnim;
 let timePoints;
 let steps;
 let curTimePoint = 0;
 let instructions = [{
-        'id': 'anim_changePlug',
-        'time': [
-            [2, 5],
-            [5, 10],
-            [10, 12.63]
-        ]
-    },
-    {
-        'id': 'anim_changeGasket',
-        'time': [
-            [2, 5],
-            [5, 10],
-            [10, 16],
-            [16, 24],
-        ]
-    }
+    'id': 'anim_changePlug',
+    'time': [
+        [2, 5],
+        [5, 10],
+        [10, 12.63]
+    ]
+},
+{
+    'id': 'anim_changeGasket',
+    'time': [
+        [2, 5],
+        [5, 10],
+        [10, 16],
+        [16, 24],
+    ]
+},
+{
+    'id': 'anim_changeCol',
+    'time': [
+        [1.2, 3.8],
+        [3.8, 6.4],
+        [6.4, 9.3],
+        [9.3, 11.6],
+        [11.6, 14.4],
+        [14.4, 20]
+    ]
+}
 ];
 
 function animStart(id) {
@@ -184,6 +194,8 @@ function animStart(id) {
     }
     $(`#${id}`).on('click', () => {
         aExt = viewer.getExtension('Autodesk.Fusion360.Animation');
+        $('#animToggle').unbind();
+        $('#animQuit').unbind();
         if (!aExt.isPlaying()) {
             if (aExt.getCurrentTime() !== 0) {
                 aExt.play();
@@ -192,7 +204,6 @@ function animStart(id) {
             if (checkCurTime != 'undefined') {
                 clearInterval(checkCurTime);
             }
-
 
             aExt.load();
             aExt.play();
@@ -230,7 +241,6 @@ function animStart(id) {
                             $(steps[index]).removeClass('activeText');
                         }
                     }
-                    clearInterval(checkStateAnim);
                 });
             }
 
@@ -273,7 +283,6 @@ function animStart(id) {
             if (timePoints && steps.length > 0) {
                 checkCurTime = setInterval(() => {
                     changeInstruction();
-
                 }, 100);
             }
         }
