@@ -1,16 +1,16 @@
-$(document).ready(function () {
+$(document).ready(function() {
     prepareTree();
     $.ajax({
         url: '/tree',
         type: 'GET',
-        success: function (res) {
+        success: function(res) {
             for (item in res) {
                 $('#compTree').jstree(true).settings.core.data[item] = res[item];
             }
             $('#compTree').jstree(true).refresh();
 
         },
-        error: function (err) {
+        error: function(err) {
             console.log(err);
         }
     });
@@ -57,7 +57,7 @@ function buildModelTree(model, createNodeFunc = null) {
     //builds model tree recursively
     function _buildModelTreeRec(node) {
         instanceTree.enumNodeChildren(node.dbId,
-            function (childId) {
+            function(childId) {
                 var childNode = null;
                 if (createNodeFunc) {
                     childNode = createNodeFunc(childId);
@@ -157,22 +157,22 @@ let timePoints;
 let steps;
 let curTimePoint = 0;
 let instructions = [{
-    'id': 'anim_changePlug',
-    'time': [
-        [2, 5],
-        [5, 10],
-        [10, 12.63]
-    ]
-},
-{
-    'id': 'anim_changeGasket',
-    'time': [
-        [2, 5],
-        [5, 10],
-        [10, 16],
-        [16, 24],
-    ]
-}
+        'id': 'anim_changePlug',
+        'time': [
+            [2, 5],
+            [5, 10],
+            [10, 12.63]
+        ]
+    },
+    {
+        'id': 'anim_changeGasket',
+        'time': [
+            [2, 5],
+            [5, 10],
+            [10, 16],
+            [16, 24],
+        ]
+    }
 ];
 
 function animStart(id) {
@@ -273,6 +273,7 @@ function animStart(id) {
             if (timePoints && steps.length > 0) {
                 checkCurTime = setInterval(() => {
                     changeInstruction();
+
                 }, 100);
             }
         }
@@ -284,6 +285,7 @@ function changeInstruction() {
     for (let i = 0; i <= steps.length - 1; i++) {
         if (aExt.getCurrentTime() == aExt.getDuration()) {
             $(steps[steps.length - 1]).removeClass('activeText');
+            $('#animToggle').html('<i class="fas fa-play"></i>');
             break;
         }
         if ((aExt.getCurrentTime() >= timePoints[i][0] && aExt.getCurrentTime() < timePoints[i][1])) {

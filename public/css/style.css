@@ -167,6 +167,11 @@ p {
     font-size: 18px;
     margin-top: 10px;
     text-indent: 20px;
+    text-align: justify;
+}
+
+.textInfo ul {
+    padding-left: 30px;
 }
 
 .textboard .link {
@@ -502,7 +507,7 @@ p {
     /* color: #58ACFA; */
     color: rgb(67, 159, 245);
     text-shadow: 1px 1px 1px #beebff;
-    font-weight: bold;
+    font-weight: 600;
     transition: all 0.01s ease-in-out;
 }
 
