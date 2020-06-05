@@ -538,3 +538,7 @@ p {
     opacity: 0;
     padding: 0;
 }
+
+.small-logo{
+    display: none;
+}

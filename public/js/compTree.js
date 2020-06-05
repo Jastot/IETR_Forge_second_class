@@ -209,21 +209,21 @@ function animStart(id) {
             aExt.play();
 
             if (id === 'anim_info') {
-                $('#tree').removeClass('col-sm-2 col-md-2 col-sm-3 col-md-3').addClass('col-md-0 col-sm-0');
+                $('#tree').removeClass('col-sm-4 col-md-2 col-md-3').addClass('col-md-0 col-sm-0');
                 $('#compTree').jstree("close_all");
 
                 setTimeout(() => {
-                    $('.viewer').removeClass('col-sm-6 col-md-6').addClass('col-sm-9 col-md-9');
+                    $('.viewer').removeClass('col-sm-8 col-md-6').addClass('col-sm-9 col-md-9');
                     viewer.resize();
                 }, 800);
 
                 $('#animQuit').on('click', () => {
                     aExt.setTimelineValue(0);
                     $('#toolbar-animation-Close').click();
-                    $('.viewer').removeClass('col-sm-9 col-md-9').addClass('col-sm-6 col-md-6');
+                    $('.viewer').removeClass('col-sm-9 col-md-9').addClass('col-sm-8 col-md-6');
                     viewer.resize();
                     $('#anim_info').prop('disabled', false);
-                    $('#tree').removeClass('col-sm-0 col-md-0').addClass('col-md-2 col-sm-2');
+                    $('#tree').removeClass('col-sm-0 col-md-0').addClass('col-md-2 col-sm-4');
                     $('#animQuit').css('display', 'none');
                     $('#animToggle').css('display', 'none');
                     $('.homeViewWrapper').click();

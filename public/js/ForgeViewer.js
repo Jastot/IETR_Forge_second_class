@@ -1,20 +1,13 @@
 var viewer;
 $(document).ready(function () {
     $("#forgeViewer").empty();
-    var urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZS5zdHA=';
-    var urn2 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL1Rlc3QuZjNk';
-    var urn3 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZTIyMi5mM2Q=';
-    var urn4 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZUxhc3QuZjNk';
-    var urn5 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZTIxMjMxLmYzZA==';
-    var urn6 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZVJseUxhc3QuZjNk';
-    var urn7 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0VuZ2luZVYyLmYzZA==';
-    var urn8 = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0xhc3RvdmF5YS5mM2Q=';
+    var urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0xhc3RvdmF5YS5mM2Q=';
     getForgeToken(function (access_token) {
         jQuery.ajax({
-            url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn8 + '/manifest',
+            url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn + '/manifest',
             headers: { 'Authorization': 'Bearer ' + access_token },
             success: function (res) {
-                if (res.status === 'success') launchViewer(urn8);
+                if (res.status === 'success') launchViewer(urn);
                 else $("#forgeViewer").html('Преобразование всё ещё выполняется').css('color', 'lightblue');
             }
         });
@@ -41,7 +34,6 @@ function launchViewer(urn) {
 }
 
 function onDocumentLoadSuccess(doc) {
-    // console.log(get_new_data(chi));
     var viewables = doc.getRoot().getDefaultGeometry();
 
     viewer.loadDocumentNode(doc, viewables).then(() => {
@@ -63,11 +55,9 @@ function onDocumentLoadSuccess(doc) {
         }
 
         viewer.addEventListener(Autodesk.Viewing.GEOMETRY_LOADED_EVENT, (e) => {
-            // console.log(viewer);
             // let components = buildModelTree(viewer.model);
             // let comp_data = components;
             // let chi = get_children(comp_data.children);
-            // console.log(e.model);
             if (e.model.id === 4) {
                 $("#compTree").jstree("select_node", 'info');
                 $("#compTree").jstree("activate_node", 'info');
@@ -90,11 +80,10 @@ let isolated;
 let lastNode;
 
 function treeEvents() {
-
     $("#compTree").on("open_node.jstree", function (e, data) {
         if (data.node.id === 'components' || data.node.id === 'service') {
             var row = $(".row").children();
-            $(row[0]).removeClass('col-sm-2 col-md-2').addClass('col-sm-3 col-md-3');
+            $(row[0]).removeClass('col-md-2').addClass('col-md-3');
             setTimeout(() => {
                 viewer.resize();
             }, 450);
@@ -105,7 +94,7 @@ function treeEvents() {
     $("#compTree").on("close_node.jstree", function (e, data) {
         if ((data.node.id === 'components' || data.node.id === 'service') && !$("#compTree").jstree(true).get_node("components").state.opened && !$("#compTree").jstree(true).get_node("service").state.opened) {
             var row = $(".row").children();
-            $(row[0]).removeClass('col-sm-3 col-md-3').addClass('col-sm-2 col-md-2');
+            $(row[0]).removeClass('col-md-3').addClass('col-md-2');
             setTimeout(() => {
                 viewer.resize();
             }, 450);

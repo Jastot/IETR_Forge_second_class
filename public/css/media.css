@@ -1,0 +1,50 @@
+@media screen and (max-width: 1280px) {
+    .navbar{
+        min-height: 71px;
+    }
+    .navbar .title{
+        padding: 0 50px;
+    }
+    .logo{
+        display: none;
+    }
+    .small-logo{
+        display:block;
+        position: absolute;
+        left: 5px;
+        top: 10px;
+    }
+  }
+
+  @media screen and (max-width: 715px){
+    .navbar .title{
+        font-size: 25px;
+    }
+  }
+
+  @media screen and (max-width: 500px){
+    .navbar .title{
+        font-size: 21px;
+        line-height: 36px;
+    }
+  }
+
+  @media screen and (max-width: 950px){
+        #textboard{
+            min-width: 350px;
+            position: relative;
+            margin: 0 auto;
+            max-height: auto;
+        }
+        #tree{
+            min-width: 150px;
+            max-height: 210px;
+        }
+        #tree .panel{
+            max-height: 210px;
+        }
+        #compTree{
+            max-height: 203px;
+        }
+  }
+
