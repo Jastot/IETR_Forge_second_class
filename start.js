@@ -30,7 +30,7 @@ MongoClient.connect(db_url, { useUnifiedTopology: true }, function (err, databas
     if (err) {
         return console.log(err);
     }
-    db = database.db('heroku_whcx8gwx');
+    db = database.db('ietm-mongodb');
     console.log(`CONNECTED TO ${db.databaseName}`);
     app.listen(PORT, () => { console.log(`Server listening on port ${PORT}`); });
 });
