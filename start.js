@@ -25,7 +25,7 @@ app.use((err, req, res, next) => {
     res.status(err.statusCode).json(err);
 });
 
-var db_url = process.env.MONGODB_URI;
+var db_url = process.env.MONGODB_URL;
 MongoClient.connect(db_url, { useUnifiedTopology: true }, function (err, database) {
     if (err) {
         return console.log(err);

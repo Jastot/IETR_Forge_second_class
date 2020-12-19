@@ -1,7 +1,7 @@
 var viewer;
 $(document).ready(function () {
     $("#forgeViewer").empty();
-    var urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6dDhkN3h2anZkY2VjdWx3eXN6ZmVpaWg1ZXZ0Z3RqYm8tZW5naW5lL0xhc3RvdmF5YS5mM2Q=';
+    var urn = 'dXJuOmFkc2sub2JqZWN0czpvcy5vYmplY3Q6ZW5naW5lLWlldG0vRW5naW5lLmYzZA';
     getForgeToken(function (access_token) {
         jQuery.ajax({
             url: 'https://developer.api.autodesk.com/modelderivative/v2/designdata/' + urn + '/manifest',
